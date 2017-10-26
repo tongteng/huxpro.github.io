@@ -2,10 +2,11 @@
 layout:     post
 title:      "HTML总结"
 date:       2017-10-25 23:00:00
-author:     "HandsomeTT"
+author:     "HandSomeTT"
 header-img: "img/post-bg-html.jpg"
 tags:
     - HTML
+    - 面试总结
 ---
 
 > 在这个收割offer的季节，我在干嘛？专注玩蛇二十余年。

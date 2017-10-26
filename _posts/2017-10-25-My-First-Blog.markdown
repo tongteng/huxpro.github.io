@@ -3,7 +3,7 @@ layout:     post
 title:      "我的博客终于开通了"
 date:       2017-10-25 23:00:00
 author:     "HandsomeTT"
-header-img: "img/post-bg-rwd.jpg"
+header-img: "img/post-bg-firstBlog.jpg"
 tags:
     - 记录生活
 ---
