@@ -48,17 +48,6 @@ layout: default
         			</div>
                 </section>
                 {% endif %}
-
-                <!-- Friends Blog -->
-                {% if site.friends %}
-                <hr>
-                <h5>FRIENDS</h5>
-                <ul class="list-inline">
-                    {% for friend in site.friends %}
-                        <li><a href="{{friend.href}}">{{friend.title}}</a></li>
-                    {% endfor %}
-                </ul>
-                {% endif %}
             </div>
         {% else %}
 
@@ -184,12 +173,12 @@ layout: default
                     </div>
                 </section>
                 <!-- Friends Blog -->
-                {% if site.friends %}
+                {% if site.likes %}
                 <hr>
-                <h5>FRIENDS</h5>
+                <h5>LIKES</h5>
                 <ul class="list-inline">
-                    {% for friend in site.friends %}
-                        <li><a href="{{friend.href}}">{{friend.title}}</a></li>
+                    {% for like in site.likes %}
+                        <li><a href="{{like.href}}">{{like.title}}</a></li>
                     {% endfor %}
                 </ul>
                 {% endif %}
