@@ -62,7 +62,7 @@ tags:
 ![img](/img/in-post/post-css-mianshi-zongjie-2/floatdemo3.png)
 
 
-### 那么怎么清楚浮动元素呢
+### 那么怎么清除浮动元素呢
 
 **1、伪元素,一般在浮动元素的父级元素中加入该类clearF**
 ```css
@@ -79,7 +79,7 @@ tags:
 }
 ```
 
-比如上面的粒子，我们给其添加这个class看看效果
+比如上面的例子，我们给其添加这个class看看效果
 
 ![img](/img/in-post/post-css-mianshi-zongjie-2/floatdemo4.png)
 
@@ -140,6 +140,9 @@ float: left/right;
 
 ![img](/img/in-post/post-css-mianshi-zongjie-2/floatdemo5.png)
 
-
-
 <br>
+
+
+>既然选择了远方，便只顾风雨兼程。
+
+—— HandSomeTT 2017.10.26

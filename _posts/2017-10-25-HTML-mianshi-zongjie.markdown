@@ -89,7 +89,7 @@ tags:
 </div>
 
 
->preparing...
+>既然选择了远方，便只顾风雨兼程。
 
 —— HandSomeTT 2017.10.25
 
