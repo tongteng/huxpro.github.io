@@ -22,7 +22,7 @@ tags:
 
 ![img](/img/in-post/post-css-mianshi-zongjie-2/floatdemo2.png)
 <div class="text-center">
-	图片来自于<a href="http://www.jiashu.com/p/09bd5873bed4">简书</a>
+	图片来自于<a href="http://www.jianshu.com/p/09bd5873bed4">简书</a>
 </div>
 
 ### 那么浮动元素又有哪些影响呢
