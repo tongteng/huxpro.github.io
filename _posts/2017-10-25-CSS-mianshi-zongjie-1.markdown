@@ -1,6 +1,7 @@
 ---
 layout:     post
-title:      "CSS总结（一）"
+title:      "CSS面试总结（一）"
+subtitle:	'"引入CSS,选择器,权重,盒模型,居中,三栏布局,position,display,画三角形,品字布局"'
 date:       2017-10-25 23:00:00
 author:     "HandSomeTT"
 header-img: "img/post-bg-css.jpg"

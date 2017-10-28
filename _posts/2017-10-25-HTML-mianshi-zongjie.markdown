@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "HTML总结"
+title:      "HTML面试总结"
 date:       2017-10-25 15:00:00
 author:     "HandSomeTT"
 header-img: "img/post-bg-html.jpg"

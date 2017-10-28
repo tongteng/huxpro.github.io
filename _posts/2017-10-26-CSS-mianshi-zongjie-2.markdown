@@ -1,6 +1,7 @@
 ---
 layout:     post
-title:      "CSS总结（二）——清除浮动流"
+title:      "CSS面试总结（二）"
+subtitle:	'"清除浮动流,BFC"'
 date:       2017-10-26 12:00:00
 author:     "HandSomeTT"
 header-img: "img/post-bg-css.jpg"
