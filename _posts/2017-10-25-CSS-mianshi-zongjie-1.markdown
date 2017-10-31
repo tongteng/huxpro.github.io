@@ -116,8 +116,7 @@ tags:
 						&nbsp;&nbsp;&nbsp;&nbsp;float: right;<br>
 					&nbsp;&nbsp;}<br>
 					&nbsp;&nbsp;.mid{<br>
-						&nbsp;&nbsp;&nbsp;&nbsp;width: 100%;<br>
-						&nbsp;&nbsp;&nbsp;&nbsp;height: 100%;<br>
+						&nbsp;&nbsp;&nbsp;&nbsp;height: 100px;<br>
 						&nbsp;&nbsp;&nbsp;&nbsp;margin-left: 100px;<br>
 						&nbsp;&nbsp;&nbsp;&nbsp;margin-right: 100px;<br>
 					&nbsp;&nbsp;}
@@ -136,7 +135,6 @@ tags:
 						&nbsp;&nbsp;&nbsp;&nbsp;right: 0;<br>
 					&nbsp;&nbsp;}<br>
 					&nbsp;&nbsp;.mid{<br>
-						&nbsp;&nbsp;&nbsp;&nbsp;width: 100%;<br>
 						&nbsp;&nbsp;&nbsp;&nbsp;height: 100px;<br>
 						&nbsp;&nbsp;&nbsp;&nbsp;margin-left: 100px;<br>
 						&nbsp;&nbsp;&nbsp;&nbsp;margin-right: 100px;<br>
