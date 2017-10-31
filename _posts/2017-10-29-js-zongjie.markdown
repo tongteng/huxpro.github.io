@@ -16,7 +16,7 @@ tags:
 
 ## 事件
 
-事件的方法有很多，鼠标事件(click,mousedown,mouseup,mouseover(mouseenter),mouseout(mouseleave),mousemove)
+事件的方法有很多，鼠标事件（click，mousedown，mouseup，mouseover(mouseenter)，mouseout(mouseleave)，mousemove）
 
 获取event事件
 
