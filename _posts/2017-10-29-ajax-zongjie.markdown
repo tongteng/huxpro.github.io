@@ -65,3 +65,5 @@ function Ajax(json) {	//我们可以传一个对象，里面包括url, data, fla
 	}
 }
 ```
+
+
