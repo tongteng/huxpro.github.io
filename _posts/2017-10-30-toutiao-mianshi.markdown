@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "Ajax"
+title:      "头条的面试"
 date:       2017-10-29 22:00:00
 author:     "HandSomeTT"
 header-img: "img/post-bg-js.jpg"
@@ -22,6 +22,8 @@ tags:
 
 
 http 方法
+
+权重值
 
 cookie session
 
