@@ -23,6 +23,10 @@ tags:
 
 http 方法
 
+call apply bind
+
+this
+
 权重值
 
 cookie session
