@@ -23,9 +23,7 @@ tags:
 
 http 方法
 
-call apply bind
-
-this
+To **[this(call, apply, bind)](/2017/11/02/js-this/index.html)**
 
 权重值
 
@@ -35,7 +33,7 @@ udp tcp区别
 
 纯CSS写一个自适应正方形
 
-节流
+To **[节流](/2017/10/31/js-jieliu/index.html)**
 
 jquery on方法的实现
 
@@ -45,7 +43,7 @@ jquery on方法的实现
 
 设计模式
 
-CDN
+To **[CDN](/2017/11/01/wangluo-cdn/index.html)**
 
 get put
 
