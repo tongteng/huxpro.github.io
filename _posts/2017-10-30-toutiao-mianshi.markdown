@@ -25,9 +25,9 @@ http 方法
 
 To **[this(call, apply, bind)](/2017/11/02/js-this/index.html)**
 
-权重值
+To **[权重值](/2017/10/25/CSS-mianshi-zongjie-1/index.html)**
 
-cookie session
+To **[cookie session](/2017/11/07/cookie-session/index.html)**
 
 udp tcp区别
 

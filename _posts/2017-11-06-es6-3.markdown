@@ -1,0 +1,14 @@
+---
+layout:     post
+title:      "ES6(三)"
+subtitle: 	"字符串的扩展"
+date:       2017-11-06 12:00:00
+author:     "HandSomeTT"
+header-img: "img/post-bg-js.jpg"
+tags:
+    - JS
+    - ES6
+---
+
+>一蓑烟雨任平生
+
