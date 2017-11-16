@@ -9,7 +9,8 @@ tags:
 ---
 
 
-> 在这个收割offer的季节，我在干嘛？专注玩蛇二十余年。
+>yi蓑烟雨任平生
+
 
 
 **美团的视频面试**
@@ -23,9 +24,7 @@ tags:
 
 预编译
 
-To **[localStorage、cookie、sessionStorage]()**
-
-session
+To **[session,cookie,localStorage,sessionStorage](/2017/11/07/cookie-session/index.html)**
 
 To **[浏览器渲染过程](/2017/11/03/xuanran-yuanli/index.html)**
 

@@ -1,6 +1,7 @@
 ---
 layout:     post
-title:      "Cookie与Session"
+title:      "浏览器缓存与存储"
+subtitle: 	"cookie, session, localStorage, sessionStorage"
 date:       2017-11-07 12:00:00
 author:     "HandSomeTT"
 header-img: "img/post-bg-js.jpg"
@@ -8,7 +9,7 @@ tags:
     - 网络
 ---
 
->一蓑烟雨任平生
+>yi蓑烟雨任平生
 
 
 之前我们说过`localStorage`,`sessionStorage`,`Cookie`的区别。我们今天来聊一聊`Cookie`与`Session`之间的联系与区别。
@@ -97,6 +98,9 @@ document.domain = 'baidu.com'
 ```
 
 我也是一知半解，在网上查查资料可能说的不是很清晰。
+
+
+### localStorage
 
 
 
