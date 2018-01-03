@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      "ES6(三)"
-subtitle: 	"字符串的扩展"
+subtitle: 	"函数的扩展"
 date:       2017-11-06 12:00:00
 author:     "HandSomeTT"
 header-img: "img/post-bg-js.jpg"
@@ -13,3 +13,154 @@ tags:
 >yi蓑烟雨任平生
 
 
+
+## 1、函数参数的默认值
+
+### 基本用法
+
+ES6之前只能通过下面这个方法给参数指定默认值
+```js
+function demo(a, b) {
+    b = b || 'world';
+    console.log(a, b);
+}
+demo('hello', '');      //hello world
+demo('hello', 'tong');  //hello tong
+demo('hello');          //hello world
+```
+上面做的缺点是如果b的值对应的布尔值为`false`，像上面第一个例子的空字符串，那么赋值就会不起作用，所以一般会判断一下其值是否为`undefined`
+```js
+function demo(a, b) {
+    if(typeof b === 'undefined'){
+        b = 'world';
+    }
+    console.log(a, b);
+}
+demo('hello', '');  //hello 
+```
+
+但是在ES6中可以给函数的参数赋予默认值
+```js
+function demo(a, b = 'world') {
+    console.log(a, b);
+}
+demo('hello', '');      //hello
+demo('hello', 'tong');  //hello tong
+demo('hello');          //hello world
+
+function add(a = 10, b = 20) {
+    console.log(a + b);
+}
+add();      //30
+add(40);    //60
+add(20,30); //50
+
+function Point(x = 10, y = 30) {
+    this.x = x;
+    this.y = y;
+}
+let point = new Point();
+point //{x: 10, y: 30}
+```
+
+这样看起来是非常简洁的，并且这样做还有两个好处：首先是便于阅读，看一眼函数就知道哪些参数可以不用给。其次是有利于代码优化，即使拿掉参数，也不会影响代码的执行。
+
+还有一点是参数的默认值不是传值，而是每次都重新计算默认值表达式的值。
+```js
+let a = 10;
+function add(b = a + 1, c = 5){
+    console.log(b + c);
+}
+add();  //16
+a = 20;
+add();  //26
+```
+
+
+### 与解构赋值默认值结合使用
+
+参数的默认值可以与解构赋值的默认值结合起来使用
+
+```js
+function demo({x, y = 5}) {
+    console.log(x, y);
+}
+demo({});           //undefined 5
+demo({x:1});        //1, 5
+demo({x:1, y:2})    //1, 2
+demo();             //Uncaught TypeError: Cannot destructure property `x` of 'undefined' or 'null'.
+```
+
+上面这个例子只使用了对象的解构赋值默认值，并没有使用函数参数的默认值。只有当函数传值传了一个对象的时候才会有解构赋值的操作。如果并没有给传值传了一个对象，那就会报`cannot destructure`错误。这样的错误，我们可以通过给参数赋值一个默认对象解决。
+```js
+function demo({x, y = 5} = {}) {
+    console.log(x, y);
+}
+demo(); //undefined 5
+```
+上面的代码表示为，如果函数并没有传递参数，那么函数的默认参数为一个空对象
+
+那么问题来了，下面两个小`demo`有什么区别呢？
+```js
+function demo1({x = 1, y = 2} = {}) {
+    console.log(x, y);
+}
+function demo2({x, y} = {x: 1, y: 2}){
+    console.log(x, y);
+}
+```
+上面两个函数都给函数设定了默认值，区别是`demo1`的默认值为空对象，但是设置了对象解构赋值的默认值，`demo2`的默认值是一个有具体属性的对象，但是对象解构赋值并没有设置默认值
+
+```js
+// 当两个函数都没有参数
+demo1();    //1, 2
+demo2();    //1, 2
+
+// 当给函数传的参数x, y都有值
+demo1({x: 10, y: 20});  //10, 20
+demo2({x: 10, y: 20});  //10, 20
+
+// 当给函数只传了一个x值，y不传值
+demo1({x: 10}); //10, 2
+demo2({x: 10}); //10, undefined
+
+// 当给函数传一个空对象，不给值
+demo1({});  //1, 2
+demo2({});  //undefined, undefined
+
+// 当给函数传一个对象，不包过要使用的值
+demo1({z: 1});  //1, 2
+demo2({z: 1});  //undefined, undefined
+```
+从上面我们可以看出来，如果像`demo1`这种情况，无论给不给函数传不传参数，穿什么参数，都能够获取到自己想要的默认值，像`demo2`这种情况，当我们给函数传递参数的时候就已经把默认参数给顶替掉了，然后才进行解构赋值。所以会有默认值为`undefined`的情况，需要注意。
+
+
+### 参数默认值的位置
+
+定义默认值的参数，正常情况下应该是函数的尾参数。这样可以直白的看出来省略了哪些参数。如果非尾参设定了默认值是没办法进行省略的，得显式传`undefined`触发默认值，否则报错
+```js
+function demo(x = 1, y) {
+    console.log(x, y);
+}
+demo(10, 5);            //10, 5
+demo(false, 5);         //false, 5
+demo('', 5);            // 5
+demo(0, 5);             //0, 5
+demo(null, 5);          //null 5
+demo(undefined, 5);     //1, 5
+demo(, 5);              //Uncaught SyntaxError: Unexpected token ,
+```
+
+
+### 函数的length属性
+
+函数的`length`属性返回的是传的参数的个数
+```js
+(function demo(a, b, c) {}).length   //3
+```
+但是如果给参数赋予了默认值时 `length`属性将失真
+```js
+(function demo(a, b, c = 10){}).length     //2
+(function demo(a, b = 10, c){}).length     //1
+```
+这是因为`length`属性的含义是该函数预期传入的参数的个数。某个参数指定默认值以后，预期传入的参数个数就不包括这个参数了。并且其有截断的效果，当碰到第一个拥有默认值的参数之后，后续参数都将不在`length`的统计范围内。

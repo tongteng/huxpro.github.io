@@ -1,0 +1,12 @@
+---
+layout:     post
+title:      "我的博客终于开通了"
+date:       2018-01-01 12:00:00
+author:     "HandsomeTT"
+header-img: "img/post-bg-firstBlog.jpg"
+tags:
+    - 记录生活
+---
+
+>"It's new year"
+
