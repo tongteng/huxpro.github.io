@@ -1,8 +1,8 @@
 ---
 layout:     post
-title:      "ES6(三)"
-subtitle: 	"函数的扩展"
-date:       2017-11-06 12:00:00
+title:      "ES6(三) -- 函数的扩展"
+subtitle: 	"函数参数的默认值"
+date:       2018-02-10 12:00:00
 author:     "HandSomeTT"
 header-img: "img/post-bg-js.jpg"
 tags:
@@ -164,3 +164,113 @@ demo(, 5);              //Uncaught SyntaxError: Unexpected token ,
 (function demo(a, b = 10, c){}).length     //1
 ```
 这是因为`length`属性的含义是该函数预期传入的参数的个数。某个参数指定默认值以后，预期传入的参数个数就不包括这个参数了。并且其有截断的效果，当碰到第一个拥有默认值的参数之后，后续参数都将不在`length`的统计范围内。
+
+
+
+### 作用域
+
+在我们声明函数的时候，一旦设置了函数参数的默认值，那么函数在进行声明初始化时，参数会形成一个单独的作用域，等到初始化结束的时候作用域才会消失。
+
+```js
+let x = 10;
+function f(x, y = x) {   //这里给参数y设置了默认值x
+    console.log(y);
+}
+f(2);   //2
+```
+
+上面的例子中，当调用函数的时候给参数`y`赋予默认值`x`，这个时候会形成一个单独的作用域，这个时候`x`指向的是函数的第一个参数`x`，而不是全局作用域中的`x`，所以输出的是传入的实参`2`，我们再来看下一个例子
+
+```js
+let x = 1;
+function f(y = x) {
+    let x = 2;
+    console.log(y);
+}
+f();    //1
+```
+
+上面的例子中，当调用函数的时候参数`y`赋予默认值`x`，这时候会形成单独的作用域，但是在这个作用域中并不存在变量`x`，所以会访问全局作用域，获取到全局作用域中的`x`并赋予`y`
+如果全局作用域中并不存在`x`，就会报错，`x`并没有被定义
+
+```js
+function f(y = x) {
+    let x = 2;
+    console.log(y); 
+}
+f();    //Uncaught ReferenceError: x is not defined
+```
+
+当然，参数为一个函数的时候，也会这样
+```js
+let str = 'outer';
+function f(foo = () => str){
+    let str = 'inner';
+    console.log(foo());
+}
+f();    //outer
+```
+在函数`f`执行的时候，参数`foo`被赋予一个返回值为`str`的匿名函数，但是在函数参数形成的作用域中，并没有`str`变量，所以会到上一级作用域全局作用域中去查找，所以输出`outer`
+
+同样如果我们把外面声明的`str`去掉，函数就会报错，报什么错心里肯定都有点数，匿名函数内部的`str`先在参数内部作用域去查找，但是没找到，再去外面那层，但是还没有。
+```js
+function f(foo = () => str){
+    let str = 'inner';
+    console.log(foo());
+}
+f();    //Uncaught ReferenceError: str is not defined
+```
+
+然后我们来看一下较为复杂的例子
+```js
+let x = 1;
+function f(x, y = function(){
+    x = 2;
+}){
+    var x = 3;
+    y();
+    console.log(x); //3
+}
+f();
+console.log(x); //1
+```
+可以来分析一哈结果为哈是这样哈，在函数`f`的参数作用域中有`x`以及匿名函数`y`，`y`的函数内部有一个变量`x`指向的是参数作用域中的`x`，然后在函数`f`内部又生命了一个新的变量`x`，这个`x`与参数作用域中的`x`不是一回事，所以在执行`y`函数的时候，改变的是参数作用域中的`x`，然后`f`函数内部声明的变量`x`以及外部全局作用域中的`x`不受影响。
+但是如果我们把`f`函数内部`var x = 3`这个声明语句，换为`x = 3`赋值语句，这个时候`y`函数内部的`x`指向的就是参数作用域中的`x`，所以`x`会再次被赋值`x = 2`，最终输出`2`，但是外部全局作用域中的`x`依旧不受影响
+```js
+let x = 1;
+function f(x, y = function(){
+    x = 2;
+}){
+    x = 3;
+    y();
+    console.log(x); //2
+}
+f();
+console.log(x); //1
+```
+
+### 应用
+可以通过赋予默认值的方式，来决定一个参数是否可省略，如果是不可省略的就将报错
+
+```js
+function throwMissError() {
+    throw new Error('Missing parameter');
+}
+
+function f(x = throwMissError(), y = undefined){
+    console.log(x);
+}
+f(1);   //1
+f();    //Uncaught Error: Missing parameter
+```
+可以通过给默认值赋值一个执行函数的结果，这样当函数没有赋予默认值的时候，将错误抛出来，如果可以参数可省略的话，可以直接赋予默认值`undefined`
+
+
+
+
+
+
+
+>既然选择了远方，便只顾风雨兼程。
+
+—— HandSomeTT 2018.02.10
