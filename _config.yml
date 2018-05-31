@@ -92,10 +92,11 @@ likes: [
     },{
         title: '刘飞翔',
         href: "http://www.flyingliu.com/"
-    },{
-        title: '于华建',
-        href: "http://www.yuhuajian.com/"
     }
+    # {
+    #     title: '于华建',
+    #     href: "http://www.yuhuajian.com/"
+    # }
     # {
     # #     title: "Su",
     # #     href: "http://su.gallery/"
