@@ -1,0 +1,27 @@
+---
+layout:     post
+title:      "ES6(五) -- 数组的扩展"
+date:       2018-02-12 12:00:00
+author:     "HandSomeTT"
+header-img: "img/post-bg-js.jpg"
+tags:
+    - JS
+    - ES6
+---
+
+>yi蓑烟雨任平生
+
+## 1、扩展运算符
+
+### 含义
+
+
+
+
+
+
+
+
+>既然选择了远方，便只顾风雨兼程。
+
+—— HandSomeTT 2018.02.12
