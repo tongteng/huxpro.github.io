@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "ts-react项目构建（一）"
+title:      "ts-react项目构建（一）--- 项目初始化"
 date:       2020-04-21 12:00:00
 author:     "HandSomeTT"
 header-img: "img/post-bg-js.jpg"
@@ -15,7 +15,70 @@ tags:
 
 >yi蓑烟雨任平生
 
-## Ts-React项目构建（一）
+## 前言
+这几篇博客主要是介绍项目的**初始化**，**不涉及业务逻辑代码**，主要用到的东西是**TypeScript, WebPack, React 和 React Router**
+
+## 安装依赖
+
+>## *前置安装
+
+首先需要全局安装**typescript**，在这之前还需要**node**以及**npm**
+
+```
+npm install -g typescript
+```
+
+>## *初始化
+
+然后进行初始化，生成**package.json**和**tsconfig.json**
+
+```
+npm init -y
+tsc --init
+```
+
+>## *WebPack
+
+注意WebPack4.0之后需要安装webpack-cli
+
+```
+npm install-D webpack webpack-cli webpack-dev-server
+
+```
+
+>## *React
+
+使用ts进行编写的话需要安装相应的types包
+
+```
+npm install -S react react-dom react-router-dom
+npm i -D @types/react-router-dom @types/react-dom @types/react
+```
+
+>## *Babel
+
+ts的编译没有使用ts-loader和awesome-typescript-loader，原因是用这两个的话在后续的转换js一些语法的时候还是需要安装一些Babel插件，并且Babel比这两个的编译速度还快，所以这里直接使用Babel。
+
+```
+npm i -D @babel/core @babel/plugin-proposal-class-properties @babel/plugin-proposal-decorators @babel/plugin-syntax-dynamic-import @babel/preset-react @babel/preset-typescript babel-loader babel-plugin-import
+```
+>> ### babel/core
+babel核心
+
+>> ### babel/plugin-proposal-class-properties
+支持在class中使用如下代码定义类属性
+
+>> ### babel/plugin-proposal-decorators
+支持使用装饰器
+
+>> ### babel/plugin-syntax-dynamic-import
+异步加载import(xxx)
+
+>> ### babel/preset-react babel/preset-typescript
+编译react和ts代码变为js代码
+
+>> ### babel-plugin-import
+后续antd的按需加载需要使用
 
 
 
