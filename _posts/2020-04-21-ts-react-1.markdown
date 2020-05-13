@@ -43,7 +43,6 @@ tsc --init
 
 ```
 npm install-D webpack webpack-cli webpack-dev-server
-
 ```
 
 > *React
@@ -62,6 +61,7 @@ ts的编译没有使用ts-loader和awesome-typescript-loader，原因是用这�
 ```
 npm i -D @babel/core @babel/plugin-proposal-class-properties @babel/plugin-proposal-decorators @babel/plugin-syntax-dynamic-import @babel/preset-react @babel/preset-typescript babel-loader babel-plugin-import
 ```
+> 
 >> babel/core
 babel核心
 
