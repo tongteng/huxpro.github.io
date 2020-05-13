@@ -20,59 +20,60 @@ tags:
 
 ## 安装依赖
 
-* 前置安装
 
-首先需要全局安装**typescript**，在这之前还需要**node**以及**npm**
+* **前置安装**
 
-```
-npm install -g typescript
-```
+    首先需要全局安装**typescript**，在这之前还需要**node**以及**npm**
 
-* 初始化
+    ```
+    npm install -g typescript
+    ```
 
-然后进行初始化，生成**package.json**和**tsconfig.json**
+* **初始化**
 
-```
-npm init -y
-tsc --init
-```
+    然后进行初始化，生成**package.json**和**tsconfig.json**
 
-* WebPack
+    ```
+    npm init -y
+    tsc --init
+    ```
 
-注意WebPack4.0之后需要安装webpack-cli
+* **WebPack**
 
-```
-npm install-D webpack webpack-cli webpack-dev-server
-```
+    注意WebPack4.0之后需要安装webpack-cli
 
-* React
+    ```
+    npm install-D webpack webpack-cli webpack-dev-server
+    ```
 
-使用ts进行编写的话需要安装相应的types包
+* **React**
 
-```
-npm install -S react react-dom react-router-dom
-npm i -D @types/react-router-dom @types/react-dom @types/react
-```
+    使用ts进行编写的话需要安装相应的types包
 
-* Babel
+    ```
+    npm install -S react react-dom react-router-dom
+    npm i -D @types/react-router-dom @types/react-dom @types/react
+    ```
 
-ts的编译没有使用ts-loader和awesome-typescript-loader，原因是用这两个的话在后续的转换js一些语法的时候还是需要安装一些Babel插件，并且Babel比这两个的编译速度还快，所以这里直接使用Babel。
+* **Babel**
 
-```
-npm i -D @babel/core @babel/plugin-proposal-class-properties @babel/plugin-proposal-decorators @babel/plugin-syntax-dynamic-import @babel/preset-react @babel/preset-typescript babel-loader babel-plugin-import
-```
+    ts的编译没有使用ts-loader和awesome-typescript-loader，原因是用这两个的话在后续的转换js一些语法的时候还是需要安装一些Babel插件，并且Babel比这两个的编译速度还快，所以这里直接使用Babel。
 
-    1. babel/core babel核心
+    ```
+    npm i -D @babel/core @babel/plugin-proposal-class-properties @babel/plugin-proposal-decorators @babel/plugin-syntax-dynamic-import @babel/preset-react @babel/preset-typescript babel-loader babel-plugin-import
+    ```
 
-    2. babel/plugin-proposal-class-properties 支持在class中使用如下代码定义类属性
+        1. babel/core babel核心
 
-    3. babel/plugin-proposal-decorators 支持使用装饰器
+        2. babel/plugin-proposal-class-properties 支持在class中使用如下代码定义类属性
 
-    4. babel/plugin-syntax-dynamic-import 异步加载import(xxx)
+        3. babel/plugin-proposal-decorators 支持使用装饰器
 
-    5. babel/preset-react babel/preset-typescript 编译react和ts代码变为js代码
+        4. babel/plugin-syntax-dynamic-import 异步加载import(xxx)
 
-    6. babel-plugin-import 后续antd的按需加载需要使用
+        5. babel/preset-react babel/preset-typescript 编译react和ts代码变为js代码
+
+        6. babel-plugin-import 后续antd的按需加载需要使用
 
 
 
