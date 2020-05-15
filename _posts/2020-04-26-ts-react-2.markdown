@@ -1,0 +1,171 @@
+---
+layout:     post
+title:      "ts-react项目构建（二）--- 使用Sass和Antd"
+date:       2020-04-26 12:00:00
+author:     "HandSomeTT"
+header-img: "img/post-bg-js.jpg"
+tags:
+    - JS
+    - Webpack
+    - TypeScript
+    - React
+    - 项目构建
+    - Sass
+    - Antd
+    - 按需加载
+---
+
+
+>yi蓑烟雨任平生
+
+## 前言
+这篇主要介绍在项目中引入Sass和Antd
+1. 支持**sass**
+2. 支持**css-module**
+3. 支持公共样式
+4. **antd**及其按需加载
+
+### 安装依赖
+
+
+* **前置安装**
+
+    首先需要全局安装**typescript**，在这之前还需要**node**以及**npm**
+
+    ```
+    npm install -g typescript
+    ```
+
+* **初始化**
+
+    然后进行初始化，生成**package.json**和**tsconfig.json**
+
+    ```
+    npm init -y
+    tsc --init
+    ```
+
+* **WebPack**
+
+    注意**WebPack4.0**之后需要安装**webpack-cli**
+
+    ```
+    npm install -D webpack webpack-cli webpack-dev-server
+    ```
+
+* **React**
+
+    使用**ts**进行编写的话需要安装相应的**types**包
+
+    ```
+    npm install -S react react-dom react-router-dom
+    npm i -D '@types/react-router-dom' '@types/react-dom' '@types/react'
+    ```
+
+* **Babel**
+
+    **ts**的编译没有使用**ts-loader**和**awesome-typescript-loader**，原因是用这两个的话在后续的转换**js**一些语法的时候还是需要安装一些**Babel**插件，并且**Babel**比这两个的编译速度还快，所以这里直接使用**Babel**。
+
+    ```
+    npm install -D '@babel/core' '@babel/plugin-proposal-class-properties' '@babel/plugin-proposal-decorators' '@babel/plugin-syntax-dynamic-import' '@babel/preset-react' '@babel/preset-typescript' babel-loader babel-plugin-import
+    ```
+
+        1. **babel/core** babel核心
+
+        2. **babel/plugin-proposal-class-properties** 支持在class中使用如下代码定义类属性
+        ```
+        class test {
+            a = 123
+        }
+        ```
+
+        3. **babel/plugin-proposal-decorators** 支持使用装饰器
+
+        4. **babel/plugin-syntax-dynamic-import** 异步加载import(xxx)
+
+        5. **babel/preset-react babel/preset-typescript** 编译react和ts代码变为js代码
+
+        6. **babel-plugin-import** 后续antd的按需加载需要使用
+
+
+* **html-webpack-plugin**
+
+    处理**html**模板，把编译后的相关**script**插入到**html**模板中
+    ```
+    npm i -D html-webpack-plugin
+    ```
+
+### 搭建
+
+* 首先我们编写**webpack**的配置文件，在项目根目录新建**build**文件夹作为**webpack**配置存放位置，然后在下面新建**webpack.config.js**
+
+  ![img](/img/ts-init/img1.jpg)
+
+* 在**webpack.config.js**中编写项目入口和编译后的出口
+
+  ![img](/img/ts-init/img2.jpg)
+
+  注意这个地方上面的@type {import('webpack').Configuration}，这个配置可以使得你在编写**webpack**的时候有配置项提醒
+
+* 为了方便路径处理，我们在**build**文件夹下新建一个**utils.js**文件，内容如下:
+
+  ![img](/img/ts-init/img3.jpg)
+
+  然后在**webpack.config.js**中因为**resolve**方法，并修改对应的路径:
+
+  ![img](/img/ts-init/img4.jpg)
+
+* 然后在**build**中再新建**tpl**文件夹，里面存放**html**模板**index.html**
+
+  ![img](/img/ts-init/img5.jpg)
+
+* 在**build**中新建文件夹**rules**，用来存放各种**rule**，我们先新建一个**jsRules.js**文件，并在其中导出一个数组:
+
+  ![img](/img/ts-init/img6.jpg)
+
+  然后在**webpack.config.js**中导入这个文件中的数组，并在**module**配置中进行引用:
+
+  ![img](/img/ts-init/img7.jpg)
+
+* 做完后，从上面**webpack**的配置可以看出，入口将会在**src**文件夹中，所以我们在根目录中新建**src**文件夹，然后在里面新建**index.tsx**，并编写入口文件:
+
+  ![img](/img/ts-init/img8.jpg)
+
+* 我们会发现之前的**index.tsx**中报了一个错误，原因是未在**tsconfig**中开启**jsx**配置:
+
+  ![img](/img/ts-init/img9.jpg)
+
+  只需要在**tsconfig**中将**jsx**选项设置为**react**即可解决:
+  
+  ![img](/img/ts-init/img10.jpg)
+
+* 现在回到**build/rules/jsRules.js**文件中，编写**babel**对<strong>.tsx</strong>文件编译的配置
+
+  ![img](/img/ts-init/img11.jpg)
+
+* 在**build**下新建**plugins.js**文件用以存放**webpack**的插件，引入**html-webpack-plugin**并编写相关配置
+
+  ![img](/img/ts-init/img12.jpg)
+
+  在**webpack.config.json**中导入并使用:
+
+  ![img](/img/ts-init/img13.jpg)
+
+* 最后在**package.json**中添加项目启动命令
+
+  ```
+  "dev": "webpack-dev-server --config build/webpack.config.js --mode development"
+  ```
+
+  ![img](/img/ts-init/img14.jpg)
+
+  运行**npm run dev**，项目就成功跑起来了:
+
+  ![img](/img/ts-init/img15.jpg)
+
+  ![img](/img/ts-init/img16.jpg)
+
+
+>既然选择了远方，便只顾风雨兼程。
+
+—— HandSomeTT 2020.04.21
