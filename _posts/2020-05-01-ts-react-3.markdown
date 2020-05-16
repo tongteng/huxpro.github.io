@@ -1,7 +1,7 @@
 ---
 layout:     post
-title:      "ts-react项目构建（三）--- 搭建路由和支持Axios"
-date:       2020-05-03 12:00:00
+title:      "ts-react项目构建（三）--- 开发体验优化"
+date:       2020-05-01 12:00:00
 author:     "HandSomeTT"
 header-img: "img/post-bg-js.jpg"
 tags:
@@ -10,8 +10,6 @@ tags:
     - TypeScript
     - React
     - 项目构建
-    - React-router
-    - Axios
 ---
 
 
@@ -168,6 +166,7 @@ tags:
   在**less-loader**不要使用**thread-loader**，否则报错。
 
   ![img](/img/opt-exp/img25.jpg)
+
 
   这时候我们重跑项目会发现新建了一个<strong>.cache-loader</strong>目录，这就表示成功配置完成:
 
