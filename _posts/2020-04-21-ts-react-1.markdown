@@ -140,7 +140,7 @@ tags:
 
   ![img](/img/ts-init/img12.jpg)
 
-  在**webpack.config.json**中导入并使用:
+  在**webpack.config.js**中导入并使用:
 
   ![img](/img/ts-init/img13.jpg)
 

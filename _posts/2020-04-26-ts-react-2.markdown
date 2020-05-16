@@ -37,17 +37,18 @@ tags:
   1. 要使用sass的语法，我们不单单要安装sass-loader和node-sass，还需要安装style-loader以及css-loader
      
      ```
-     npm i -D sass-loader node-sass style-loader css-loader
+     npm install -D sass-loader node-sass style-loader css-loader
      ```
 
      另外在国内装不下node-sass或者装得慢的同学可以在使用淘宝源安装
   
   2. 安装完成后，我们在build/rules下新建styleRules.js文件，并编写相关配置:
-
+     
+     ![img](/img/sass-antd/img1.jpg)
 
      之后在webpack.config.js中进行引用:
 
-
+     ![img](/img/sass-antd/img2.jpg)
 
      这里有一点需要注意的是，webpack调用这三个loader的顺序是从右到左的，也就是上图的从下到上，其中:
      sass-loader: 将 Sass 编译成 CSS，默认使用 Node Sass
@@ -56,11 +57,13 @@ tags:
 
   3. 然后src下新建一个index.scss，随便写入一个样式，在index.tsx中使用:
 
+     ![img](/img/sass-antd/img3.jpg)
 
+     ![img](/img/sass-antd/img4.jpg)
 
   4. 这时候就可以使用sass来进行样式编写了
 
-
+     ![img](/img/sass-antd/img5.jpg)
 
 ### 支持css-module
 
@@ -73,53 +76,69 @@ tags:
 
   1. 要支持css-module非常简单，只要在前面的styleRules.js文件中，针对css-loader做一个配置即可:
 
-
+     ![img](/img/sass-antd/img6.jpg)
   
   2. 然后在src/index.tsx中将scss文件的引入和使用方式改成如下:
 
+     ![img](/img/sass-antd/img7.jpg)
 
      这时候我们就可以查看效果了，可以看到test变成了一串自动生成的hash码:
 
+     ![img](/img/sass-antd/img8.jpg)
 
      当然也有小伙伴可能会说，变成了这一串hash那我怎么知道这个元素是哪个组件的呢?我们把配置改成如下即可:
 
+     ![img](/img/sass-antd/img9.jpg)
 
      可以看到类名中加上了原本的类名:
 
-
+     ![img](/img/sass-antd/img10.jpg)
 
   3. 在前面配置和使用中，虽然已经可以正常使用，但是index.tsx出现了一个错误，说找不到index.scss文件
+
+     ![img](/img/sass-antd/img11.jpg)
 
      原因是ts不认识这个scss文件，所以这时候需要编写对应的类型文件.d.ts。
      我们在src下新建types文件夹，并新建typed-css-modules.d.ts文件，在里面定义scss模块内容:
 
-
+     ![img](/img/sass-antd/img12.jpg)
 
      这时候引用scss文件就不会再报错了，但同时存在一个问题，styles的类型是any:
 
+     ![img](/img/sass-antd/img13.jpg)
 
-  4. 要添加对styles的类型定义，我们当然可以自己新建一个index.scss.d.ts文件在里面自己写一个interface来定义，但是这样未免太过于麻烦，所以这时候我们可以使用css-modules-typescript-loader这个库来帮助我们定义，首先需要安装它npm i -D css-modules-typescript-loader，然后在styleRules.js中加上他:
+  4. 要添加对styles的类型定义，我们当然可以自己新建一个index.scss.d.ts文件在里面自己写一个interface来定义，但是这样未免太过于麻烦，所以这时候我们可以使用css-modules-typescript-loader这个库来帮助我们定义，首先需要安装它
 
+     ```
+     npm install -D css-modules-typescript-loader
+     ```
+
+     然后在styleRules.js中加上他:
+
+     ![img](/img/sass-antd/img14.jpg)
 
      在编写或改动了scss文件后， 它会自动生成index.scss.d.ts文件:
 
+     ![img](/img/sass-antd/img15.jpg)
 
 ### 支持公共样式
 
   在支持了sass之后，我们可以在样式代码的编写中使用变量，而有些变量可以放置在公共的样式文件中，使用的时候直接引用即可。
   我们在src下新建styles文件夹，然后新建base.scss文件，在里面写入一个变量:
 
-
+  ![img](/img/sass-antd/img16.jpg)
 
   之后我们在index.scss文件中引用这个变量:
 
+  ![img](/img/sass-antd/img17.jpg)
 
+  这时候还需要在styleRules.js中，将公共样式文件夹的路径添加进去，否则sass-loader不会去编译这些文件，这里需要注意的是，这里使用的是sass-loader@7.3.1，而在最新的8.0.2版本不能直接在options中写includePaths，而需要在sassOptions中写，之前的版本则可以直接写includePaths，另外8.0.2版本和后面会说到的thread-loader配合起来会报错，所以现在先不要用8.0.2版本:
 
-  这时候还需要在styleRules.js中，将公共样式文件夹的路径添加进去，否则sass-loader不会去编译这些文件，这里需要注意的是，这里使用的是sass-loader@7.3.1，而在最新的8.0.0版本不能直接在options中写includePaths，而需要在sassOptions中写，之前的版本则可以直接写includePaths，另外8.0.0版本和下一章会说到的thread-loader配合起来会报错，所以现在先不要用8.0.0版本:
-
+  ![img](/img/sass-antd/img18.jpg)
 
   这是我们可以看到效果依旧正确
 
+  ![img](/img/sass-antd/img19.jpg)
 
 ### antd及其按需加载
 
@@ -128,31 +147,36 @@ tags:
 * **需要安装antd**
 
   ```
-  npm i -S antd
+  npm install -S antd
   ```
 
 * **antd按需加载**
 
   因为前面已经安装了babel-plugin-import，所以我们可以直接用按需加载的方式使用antd的组件:
 
-
+  ![img](/img/sass-antd/img20.jpg)
 
   但是你会发现这样引入的组件缺少样式
 
+  ![img](/img/sass-antd/img21.jpg)
 
   这时候我们需要在jsRules.js文件中添加对应的配置:
 
+  ![img](/img/sass-antd/img22.jpg)
 
   另外，因为antd的样式使用的是less编写而成，所以我们需要额外安装less和less-loader
 
   ```
-  npm i -D less less-loader
+  npm install -D less less-loader
   ```
   然后在styleRules.js中添加对less文件的支持，注意less-loader4.0以后的版本在这里的javascriptEnabled一定要为true，否则因为无法开启js编译而导致报错:
+  但是如果less-loader为最新版本的话会提示没有当前配置项，所以这里直接使用less-loader@5.0.0版本
 
+  ![img](/img/sass-antd/img23.jpg)
 
   最后回到页面中会发现样式引入也ok了:
 
+  ![img](/img/sass-antd/img24.jpg)
 
 
 >既然选择了远方，便只顾风雨兼程。
