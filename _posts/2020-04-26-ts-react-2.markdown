@@ -25,145 +25,134 @@ tags:
 3. 支持公共样式
 4. **antd**及其按需加载
 
-### 安装依赖
+### 支持Sass
 
 
-* **前置安装**
+* **什么是sass**
 
-    首先需要全局安装**typescript**，在这之前还需要**node**以及**npm**
+    sass是一款css预处理语言，支持变量，嵌套，mixin和导入等功能，可以极大地方便和简化css写法。
 
-    ```
-    npm install -g typescript
-    ```
+* **支持sass**
 
-* **初始化**
+  1. 要使用sass的语法，我们不单单要安装sass-loader和node-sass，还需要安装style-loader以及css-loader
+     
+     ```
+     npm i -D sass-loader node-sass style-loader css-loader
+     ```
 
-    然后进行初始化，生成**package.json**和**tsconfig.json**
-
-    ```
-    npm init -y
-    tsc --init
-    ```
-
-* **WebPack**
-
-    注意**WebPack4.0**之后需要安装**webpack-cli**
-
-    ```
-    npm install -D webpack webpack-cli webpack-dev-server
-    ```
-
-* **React**
-
-    使用**ts**进行编写的话需要安装相应的**types**包
-
-    ```
-    npm install -S react react-dom react-router-dom
-    npm i -D '@types/react-router-dom' '@types/react-dom' '@types/react'
-    ```
-
-* **Babel**
-
-    **ts**的编译没有使用**ts-loader**和**awesome-typescript-loader**，原因是用这两个的话在后续的转换**js**一些语法的时候还是需要安装一些**Babel**插件，并且**Babel**比这两个的编译速度还快，所以这里直接使用**Babel**。
-
-    ```
-    npm install -D '@babel/core' '@babel/plugin-proposal-class-properties' '@babel/plugin-proposal-decorators' '@babel/plugin-syntax-dynamic-import' '@babel/preset-react' '@babel/preset-typescript' babel-loader babel-plugin-import
-    ```
-
-        1. **babel/core** babel核心
-
-        2. **babel/plugin-proposal-class-properties** 支持在class中使用如下代码定义类属性
-        ```
-        class test {
-            a = 123
-        }
-        ```
-
-        3. **babel/plugin-proposal-decorators** 支持使用装饰器
-
-        4. **babel/plugin-syntax-dynamic-import** 异步加载import(xxx)
-
-        5. **babel/preset-react babel/preset-typescript** 编译react和ts代码变为js代码
-
-        6. **babel-plugin-import** 后续antd的按需加载需要使用
-
-
-* **html-webpack-plugin**
-
-    处理**html**模板，把编译后的相关**script**插入到**html**模板中
-    ```
-    npm i -D html-webpack-plugin
-    ```
-
-### 搭建
-
-* 首先我们编写**webpack**的配置文件，在项目根目录新建**build**文件夹作为**webpack**配置存放位置，然后在下面新建**webpack.config.js**
-
-  ![img](/img/ts-init/img1.jpg)
-
-* 在**webpack.config.js**中编写项目入口和编译后的出口
-
-  ![img](/img/ts-init/img2.jpg)
-
-  注意这个地方上面的@type {import('webpack').Configuration}，这个配置可以使得你在编写**webpack**的时候有配置项提醒
-
-* 为了方便路径处理，我们在**build**文件夹下新建一个**utils.js**文件，内容如下:
-
-  ![img](/img/ts-init/img3.jpg)
-
-  然后在**webpack.config.js**中因为**resolve**方法，并修改对应的路径:
-
-  ![img](/img/ts-init/img4.jpg)
-
-* 然后在**build**中再新建**tpl**文件夹，里面存放**html**模板**index.html**
-
-  ![img](/img/ts-init/img5.jpg)
-
-* 在**build**中新建文件夹**rules**，用来存放各种**rule**，我们先新建一个**jsRules.js**文件，并在其中导出一个数组:
-
-  ![img](/img/ts-init/img6.jpg)
-
-  然后在**webpack.config.js**中导入这个文件中的数组，并在**module**配置中进行引用:
-
-  ![img](/img/ts-init/img7.jpg)
-
-* 做完后，从上面**webpack**的配置可以看出，入口将会在**src**文件夹中，所以我们在根目录中新建**src**文件夹，然后在里面新建**index.tsx**，并编写入口文件:
-
-  ![img](/img/ts-init/img8.jpg)
-
-* 我们会发现之前的**index.tsx**中报了一个错误，原因是未在**tsconfig**中开启**jsx**配置:
-
-  ![img](/img/ts-init/img9.jpg)
-
-  只需要在**tsconfig**中将**jsx**选项设置为**react**即可解决:
+     另外在国内装不下node-sass或者装得慢的同学可以在使用淘宝源安装
   
-  ![img](/img/ts-init/img10.jpg)
+  2. 安装完成后，我们在build/rules下新建styleRules.js文件，并编写相关配置:
 
-* 现在回到**build/rules/jsRules.js**文件中，编写**babel**对<strong>.tsx</strong>文件编译的配置
 
-  ![img](/img/ts-init/img11.jpg)
+     之后在webpack.config.js中进行引用:
 
-* 在**build**下新建**plugins.js**文件用以存放**webpack**的插件，引入**html-webpack-plugin**并编写相关配置
 
-  ![img](/img/ts-init/img12.jpg)
 
-  在**webpack.config.json**中导入并使用:
+     这里有一点需要注意的是，webpack调用这三个loader的顺序是从右到左的，也就是上图的从下到上，其中:
+     sass-loader: 将 Sass 编译成 CSS，默认使用 Node Sass
+     css-loader: 将 CSS 转化成 CommonJS 模块
+     style-loader: 将 JS 字符串生成为 style 节点
 
-  ![img](/img/ts-init/img13.jpg)
+  3. 然后src下新建一个index.scss，随便写入一个样式，在index.tsx中使用:
 
-* 最后在**package.json**中添加项目启动命令
+
+
+  4. 这时候就可以使用sass来进行样式编写了
+
+
+
+### 支持css-module
+
+* **什么是css-module**
+
+  css-module是CSS模块化的一种方案，为的就是解决css类名冲突问题，同等的方案还有BEM规范
+
+
+* **支持css-module**
+
+  1. 要支持css-module非常简单，只要在前面的styleRules.js文件中，针对css-loader做一个配置即可:
+
+
+  
+  2. 然后在src/index.tsx中将scss文件的引入和使用方式改成如下:
+
+
+     这时候我们就可以查看效果了，可以看到test变成了一串自动生成的hash码:
+
+
+     当然也有小伙伴可能会说，变成了这一串hash那我怎么知道这个元素是哪个组件的呢?我们把配置改成如下即可:
+
+
+     可以看到类名中加上了原本的类名:
+
+
+
+  3. 在前面配置和使用中，虽然已经可以正常使用，但是index.tsx出现了一个错误，说找不到index.scss文件
+
+     原因是ts不认识这个scss文件，所以这时候需要编写对应的类型文件.d.ts。
+     我们在src下新建types文件夹，并新建typed-css-modules.d.ts文件，在里面定义scss模块内容:
+
+
+
+     这时候引用scss文件就不会再报错了，但同时存在一个问题，styles的类型是any:
+
+
+  4. 要添加对styles的类型定义，我们当然可以自己新建一个index.scss.d.ts文件在里面自己写一个interface来定义，但是这样未免太过于麻烦，所以这时候我们可以使用css-modules-typescript-loader这个库来帮助我们定义，首先需要安装它npm i -D css-modules-typescript-loader，然后在styleRules.js中加上他:
+
+
+     在编写或改动了scss文件后， 它会自动生成index.scss.d.ts文件:
+
+
+### 支持公共样式
+
+  在支持了sass之后，我们可以在样式代码的编写中使用变量，而有些变量可以放置在公共的样式文件中，使用的时候直接引用即可。
+  我们在src下新建styles文件夹，然后新建base.scss文件，在里面写入一个变量:
+
+
+
+  之后我们在index.scss文件中引用这个变量:
+
+
+
+  这时候还需要在styleRules.js中，将公共样式文件夹的路径添加进去，否则sass-loader不会去编译这些文件，这里需要注意的是，这里使用的是sass-loader@7.3.1，而在最新的8.0.0版本不能直接在options中写includePaths，而需要在sassOptions中写，之前的版本则可以直接写includePaths，另外8.0.0版本和下一章会说到的thread-loader配合起来会报错，所以现在先不要用8.0.0版本:
+
+
+  这是我们可以看到效果依旧正确
+
+
+### antd及其按需加载
+
+  React技术栈中，很多人都会使用antd作为自己项目的UI库，本博客也不例外，将antd集成了进去。
+
+* **需要安装antd**
 
   ```
-  "dev": "webpack-dev-server --config build/webpack.config.js --mode development"
+  npm i -S antd
   ```
 
-  ![img](/img/ts-init/img14.jpg)
+* **antd按需加载**
 
-  运行**npm run dev**，项目就成功跑起来了:
+  因为前面已经安装了babel-plugin-import，所以我们可以直接用按需加载的方式使用antd的组件:
 
-  ![img](/img/ts-init/img15.jpg)
 
-  ![img](/img/ts-init/img16.jpg)
+
+  但是你会发现这样引入的组件缺少样式
+
+
+  这时候我们需要在jsRules.js文件中添加对应的配置:
+
+
+  另外，因为antd的样式使用的是less编写而成，所以我们需要额外安装less和less-loader
+
+  ```
+  npm i -D less less-loader
+  ```
+  然后在styleRules.js中添加对less文件的支持，注意less-loader4.0以后的版本在这里的javascriptEnabled一定要为true，否则因为无法开启js编译而导致报错:
+
+
+  最后回到页面中会发现样式引入也ok了:
+
 
 
 >既然选择了远方，便只顾风雨兼程。
