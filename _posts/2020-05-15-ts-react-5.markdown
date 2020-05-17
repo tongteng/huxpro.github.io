@@ -17,173 +17,168 @@ tags:
 
 ## 前言
 
-在前端开发完成后，都需要将编写的代码编译打包成静态文件，之后才会部署到服务器上，而WebPack就是这样一个打包工具，它所有的loader、plugin都是围绕这一个功能进行的扩展，这篇文章就在之前搭建的基础上来介绍一下WebPack的打包配置吧，所用到的知识点如下:
+在前端开发完成后，都需要将编写的代码编译打包成静态文件，之后才会部署到服务器上，而**WebPack**就是这样一个打包工具，它所有的**loader**、**plugin**都是围绕这一个功能进行的扩展，这篇文章就在之前搭建的基础上来介绍一下**WebPack**的打包配置吧，所用到的知识点如下:
 
 1. 打包路径和命令添加
-2. filename和chunkFilename: hash、chunkhash和contenthash
-3. publicPath
-4. 单独打包CSS
-5. optimization优化打包
+2. **filename**和**chunkFilename**: **hash**、**chunkhash**和**contenthash**
+3. **publicPath**
+4. 单独打包**CSS**
+5. **optimization**优化打包
 6. 环境变量设置区分生产开发环境
 
 ### 打包路径和命令添加
 
 * 添加打包路径
 
-  其实在介绍**[搭建的第一篇文章中](/2020/04/21/ts-react-1/index.html)**我们就已经将打包的入口和出口都在webpack.config.js中制定好了:
+  其实在介绍**[搭建的第一篇文章中](/2020/04/21/ts-react-1/index.html)**我们就已经将打包的入口和出口都在<strong>webpack.config.js</strong>中制定好了:
 
+  ![img](/img/build/img1.jpg)
 
-
-  这段配置意思是让WebPack通过src/index.tsx作为入口，递归地建立模块依赖关系，然后打包输出模块，模块输出后存放在根目录的dist文件夹中
+  这段配置意思是让**WebPack**通过**src/index.tsx**作为入口，递归地建立模块依赖关系，然后打包输出模块，模块输出后存放在根目录的**dist**文件夹中
 
 * 添加打包命令
 
-  去到package.json加上如下命令:
+  去到**package.json**加上如下命令:
 
-
+  ![img](/img/build/img1.jpg)
 
 * 测试打包
 
-  我们运行npm run build之后可以看到包已经打好了:
+  我们运行**npm run build**之后可以看到包已经打好了:
 
-
+  ![img](/img/build/img1.jpg)
 
 ### filename和chunkFilename
 
-在webpack的output配置中，filename是打包文件名，也就是说我们列在entry中的文件打包出来的名字，在本例中就是app:
+在**webpack**的**output**配置中，**filename**是打包文件名，也就是说我们列在**entry**中的文件打包出来的名字，比如把**entry**中的文件名设置为**haha**:
 
+![img](/img/build/img1.jpg)
 
+而**chunkFilename**则是未列在**entry中**的模块文件，下面划红线的都属于**chunk file**:
 
-而chunkFilename则是未列在entry中的模块文件，下面划红线的都属于chunk file:
+![img](/img/build/img1.jpg)
 
-
-
-而filename和chunkFilename则是对这两种文件命名的设定，这个命名很重要吗?
+而**filename**和**chunkFilename**则是对这两种文件命名的设定，这个命名很重要吗?
 是的，因为浏览器存在缓存问题，如果按照目前配置，每一次代码变化的情况下打包出来的文件名不变，浏览器优先加载缓存中的文件，然后导致页面没有展示最新的页面情况。
 
-* 要解决这个问题我们先把chunkFilename设置好:
+* 要解决这个问题我们先把**chunkFilename**设置好:
 
+  ![img](/img/build/img1.jpg)
 
+* 然后可以通过给文件名设置**hash**值的方式保证每次打包的文件名都是不同的，**filename**和**chunkFilename**都支持该设置:
 
-* 然后可以通过给文件名设置hash值的方式保证每次打包的文件名都是不同的，filename和chunkFilename都支持该设置:
+  ![img](/img/build/img1.jpg)
 
-  
+* 另外这个**hash**值的设置有三种: 分别是**hash**、**chunkhash**和**contenthash**
 
-* 另外这个hash值的设置有三种: 分别是hash、chunkhash和contenthash
+  1. **hash**: **hash**和整个项目的配置有关，只要项目中有代码改变，那么所有打包出来的**hash**值都会变，并且所有文件共用一个**hash**值
+  2. **chunkhash**: **chunkhash**和**hash**不同点在于，它根据入口文件进行依赖文件解析，然后构建对应的**hash**值，也就是每个打包出来的文件**hash**值都是不一样的，每次修改代码时候，他会根据依赖关系自动修改相关模块的**hash**值，但是打包出来对应的**js**和**css**文件的**hash**会相同。
+  3. **contenthash**: 在打包代码的时候，一般会将**CSS**文件分离出来，然后我们通常会在组件中引入**CSS**文件，这时候如果使用的是**chunkhash**，在只修改组件**js**代码的情况下因为对应的**css**文件的**hash**值相同，打包出来的**css**文件的**hash**值也会跟着变，这时候就可以使用**contenthash**了，他会针对每个文件的内容来计算**hash**值。
 
-  1. hash: hash和整个项目的配置有关，只要项目中有代码改变，那么所有打包出来的hash值都会变，并且所有文件共用一个hash值
-  2. chunkhash: chunkhash和hash不同点在于，它根据入口文件进行依赖文件解析，然后构建对应的hash值，也就是每个打包出来的文件hash值都是不一样的，每次修改代码时候，他会根据依赖关系自动修改相关模块的hash值，但是打包出来对应的js和css文件的hash会相同。
-  3. contenthash: 在打包代码的时候，一般会将CSS文件分离出来，然后我们通常会在组件中引入CSS文件，这时候如果使用的是chunkhash，在只修改组件js代码的情况下因为对应的css文件的hash值相同，打包出来的css文件的hash值也会跟着变，这时候就可以使用contenthash了，他会针对每个文件的内容来计算hash值。
-
-  我们就使用chunkhash即可，CSS的contenthash可以在后面对css文件进行分离的时候再配置。
+  我们就使用**chunkhash**即可，**CSS**的**contenthash**可以在后面对**css**文件进行分离的时候再配置。
 
 ### publicPath
-publicPath也是ouput中的一个属性，用于处理打包后的引入资源路径，比如上面我没有添加publicPath的时候，打包出来的index.html引入资源的路径：
+**publicPath**也是**ouput**中的一个属性，用于处理打包后的引入资源路径，比如上面我没有添加**publicPath**的时候，打包出来的**index.html**引入资源的路径：
 
+![img](/img/build/img1.jpg)
 
+现在我把**publicPath**设置为/，再来看看打包出来的**index.html**的引入资源路径就成了绝对路径了:
 
-现在我把publicPath设置为/，再来看看打包出来的index.html的引入资源路径就成了绝对路径了:
-
-
-
-
-
+![img](/img/build/img1.jpg)
 
 那么这个配置有什么用处呢?
 
 * 用处
-  在我们对前端项目打包完毕之后，js和css等较大的静态资源都会被上传到cdn上面，而index.html则会留在我们自己的服务器上，用户访问index.html的时候，index.html加载的css和js路径就应该是cdn域名上的资源，比如说我们公司在用的狮子座资源是https://file.40017.cn/shtrain/，那么这串东西就应在放到publicPath中让他自己在资源引入的前面加上:
+  在我们对前端项目打包完毕之后，**js**和**css**等较大的静态资源都会被上传到**cdn**上面，而**index.html**则会留在我们自己的服务器上，用户访问**index.html**的时候，**index.html**加载的**css**和**js**路径就应该是**cdn**域名上的资源，比如说我们公司在用的**CDN**资源是**https://file.40017.cn/shtrain/**，那么这串东西就应在放到**publicPath**中让他自己在资源引入的前面加上:
 
-
-
-
-
+  ![img](/img/build/img1.jpg)
 
 ### 单独打包CSS
 
-  在前面的打包配置中，我们虽然可以打包成功，但是这时候的css是被嵌入到js文件中的:
+  在前面的打包配置中，我们虽然可以打包成功，但是这时候的**css**是被嵌入到**js**文件中的:
 
+  ![img](/img/build/img1.jpg)
 
+  这对于模块化来说不大好，而且还会导致**js**文件变得更大从而降低网页加载速度，所以需要将**css**额外抽离出来。
 
-  这对于模块化来说不大好，而且还会导致js文件变得更大从而降低网页加载速度，所以需要将css额外抽离出来。
-
-* 使用mini-css-extract-plugin抽离css
-  在webpack4.0后，推荐使用mini-css-extract-plugin来对css文件进行分离，首先我们需要安装mini-css-extract-plugin包，这个包里面包含一个loader和一个plugin，后续需要分别进行配置
+* 使用**mini-css-extract-plugin**抽离**css**
+  在**webpack4.0**后，推荐使用**mini-css-extract-plugin**来对**css**文件进行分离，首先我们需要安装**mini-css-extract-plugin**包，这个包里面包含一个**loader**和一个**plugin**，后续需要分别进行配置
   ```
     npm install -D mini-css-extract-plugin
   ```
 
-* 配置loader
-  接下来我们去到build/rules/styleRules.js文件中引入他:
+* 配置**loader**
+  接下来我们去到**build/rules/styleRules.js**文件中引入他:
 
-  
+  ![img](/img/build/img1.jpg)
 
   在这里需要注意一点:
-  sass-loader是将sass文件编译为css，而css-loader是将css转为CommonJS模块，style-loader是将对应的JS生成为style节点，那么如果我们要分离css文件的话，应该是在css-loader之后进行，所以下面我们把之前style-loader的地方全都替换成MiniCssExtractPlugin:
+  **sass-loader**是将**sass**文件编译为**css**，而**css-loader**是将**css**转为**CommonJS**模块，**style-loader**是将对应的**JS**生成为**style**节点，那么如果我们要分离**css**文件的话，应该是在**css-loader**之后进行，所以下面我们把之前**style-loader**的地方全都替换成**MiniCssExtractPlugin**:
 
+  ![img](/img/build/img1.jpg)
 
+* 配置**plugin**
+  然后去到**build/plugins.js**文件中，引入并使用**mini-css-extract-plugin**并使用，配置主要是**filename**和**chunkFilename**:
 
-* 配置plugin
-  然后去到build/plugins.js文件中，引入并使用mini-css-extract-plugin并使用，配置主要是filename和chunkFilename:
+  ![img](/img/build/img1.jpg)
 
-  
-
-  注意这里需要用contenthash而不是chunkhash，否则打包出来的和引用该css的js文件的hash值是一样的，而且改css还会导致打包后的js文件的hash值产生变化。
+  注意这里需要用**contenthash**而不是**chunkhash**，否则打包出来的和引用该**css**的**js**文件的**hash**值是一样的，而且改**css**还会导致打包后的**js**文件的**hash**值产生变化。
 
 * 打包结果
-  可以看到css文件已经被抽离了出来，并且js和css文件的hash值是不一样的:
+  可以看到**css**文件已经被抽离了出来，并且**js**和**css**文件的**hash**值是不一样的:
 
-  
+  ![img](/img/build/img1.jpg)
 
-* 使用optimization优化打包
-  在上面的打包配置中，因为之前做了路由组件的代码分割，所以组件PageA和PageB会被单独打包成js文件，再来看看打包的情况表，会发现page-a的公用模块(引入的库)体积高达800多k，这对于网页加载资源而言是非常大的:
+* 使用**optimization**优化打包
+  在上面的打包配置中，因为之前做了路由组件的代码分割，所以组件**PageA**和**PageB**会被单独打包成**js**文件，再来看看打包的情况表，会发现**page-a**的公用模块(引入的库)体积高达500多k，这对于网页加载资源而言是非常大的:
 
-  
+  ![img](/img/build/img1.jpg)
 
-  我们可以通过配置WebPack的optimization来对代码进一步分割，使得打出来的包更小。
+  我们可以通过配置**WebPack**的**optimization**来对代码进一步分割，使得打出来的包更小。
 
-* 首先我们去到build文件夹下新建文件optimization.js，新建并导出一个对象:
+* 首先我们去到**build**文件夹下新建文件**optimization.js**，新建并导出一个对象:
 
-  
+  ![img](/img/build/img1.jpg)
 
-  然后配置runtimeChunk:
+  然后配置**runtimeChunk**:
 
-  
+  ![img](/img/build/img1.jpg)
 
-  runtime是指webpack运行环境(模块解析和加载)和模块信息清单，而runtimeChunk就是询问该清部分清单代码是否单独打包出来，我们这里将其单独打包出来并命名为manifest。
+  **runtime**是指**webpack**运行环境(模块解析和加载)和模块信息清单，而**runtimeChunk**就是询问该清部分清单代码是否单独打包出来，我们这里将其单独打包出来并命名为**manifest**。
 
-* 然后我们通过配置splitChunk的cacheGroups将一些公共模块分离出来打包:
+* 然后我们通过配置**splitChunk**的**cacheGroups**将一些公共模块分离出来打包:
 
+  ![img](/img/build/img1.jpg)
 
+  这里面的**priority**是优先级的意思，数字越大优先级越高，**antd**依赖**moment**，所以**moment**优先级比**antd**高，然后**commons**是剩余模块统一打包不做分割了。
 
-  这里面的priority是优先级的意思，数字越大优先级越高，antd依赖moment，所以moment优先级比antd高，然后commons是剩余模块统一打包不做分割了。
+* 接下来我们把**optimization**导入到**webpack**中去使用:
 
-* 接下来我们把optimization导入到webpack中去使用:
-
-
+  ![img](/img/build/img1.jpg)
 
   然后查看一下打包结果:
 
+  ![img](/img/build/img1.jpg)
 
+  可以清楚的看到之前**vendor~page-a**文件从发500多k变成了200多k，另外还多出来一个**vendor**文件有200多k，说明是可以显著减少打包出来的文件的大小的。
+  如果还需要继续细分，可以继续在**splitChunks.cacheGroups**配置中将公用模块继续细分并添加进去，使得打包的代码越来越小
 
-  可以清楚的看到之前vendor~page-a文件从发800多k变成了500多k，另外还多出来一个vendor文件有270多k，说明是可以显著减少打包出来的文件的大小的。
-  如果还需要继续细分，可以继续在splitChunks.cacheGroups配置中将公用模块继续细分并添加进去，使得打包的代码越来越小
-
-* 压缩js优化和压缩css代码并优化
-  1. 使用terser-webpack-plugin优化js压缩过程:
-  terser-webpack-plugin是一个js代码优化插件，他可以使用多线程和缓存更快的压缩js代码，优化打包体验，并且使用非常简单。
-  为什么使用这个插件呢?因为webpack默认使用的webpack.optimize.UglifyJsPlugin插件是不支持es6语法的，当然你可以先用babel转一下再用UglifyJsPlugin也没所谓。
+* 压缩**js**代码和压缩**css**代码并优化
+  1. 使用**terser-webpack-plugin**优化js压缩过程:
+  **terser-webpack-plugin**是一个**js**代码优化插件，他可以使用多线程和缓存更快的压缩**js**代码，优化打包体验，并且使用非常简单。
+  为什么使用这个插件呢?因为**webpack**默认使用的**webpack.optimize.UglifyJsPlugin**插件是不支持**es6**语法的，当然你可以先用**babel**转一下再用**UglifyJsPlugin**也无所谓。
   首先我们安装
   ```
   npm install -D terser-webpack-plugin
   ```
   然后在build/optimization.js文件中配置minimizer，导入terser-webpack-plugin并使用即可:
 
-
+  ![img](/img/build/img1.jpg)
 
   2. 压缩css代码并优化压缩过程
   在之前的打包中，我们的js代码虽然已经经过了压缩，但是css代码还没有压缩:
 
+  ![img](/img/build/img1.jpg)
 
   这时候我们需要使用optimize-css-assets-webpack-plugin来做这件事。
   首先安装它
@@ -192,22 +187,19 @@ publicPath也是ouput中的一个属性，用于处理打包后的引入资源�
   ```
   然后继续在minimizer中进行配置:
 
+  ![img](/img/build/img1.jpg)
 
+  最后我们重新打包来看看结果:
 
-最后我们重新打包来看看结果:
+  ![img](/img/build/img1.jpg)
 
-
-
-可以看到css文件也被压缩了。
-
-
-
+  可以看到css文件也被压缩了。
 
 ### 环境变量设置区分生产开发环境
 
 在webpack4.0之后，打包的时候会出现这个警告:
 
-
+![img](/img/build/img1.jpg)
 
 这是因为在4.0后webpack受到parcel的竞争，而parcel就是号称0配置的打包器，所以webpack也内置了一套默认的打包配置，但是开发环境和生产环境的配置是不一样的，所以需要通过配置webpack.mode属性来告诉webpack处于什么环境，另外开发环境和生产环境有些不一样，例如生产环境一般不需要sourcemap功能，之前打包出来很多.map文件就是因为开启了sourcemap所致，所以我们也需要通过环境变量来对此进行区分。
 
@@ -222,15 +214,13 @@ publicPath也是ouput中的一个属性，用于处理打包后的引入资源�
   ```
   然后去到package.json文件中，在script定义的命令中插入环境变量
 
-
+  ![img](/img/build/img1.jpg)
   
   这一步的目的就是将NODE_ENV这个变量插入到进程中，开发和生产分别是development和production。
 
-
-
   然后我们去到webpack.config.js中，添加mode属性的设置，通过process.env.NODE_ENV即可获取之前设置的环境变量:
 
-
+  ![img](/img/build/img1.jpg)
 
   这样就消除了上面所说的webpack的警告了。
 
@@ -238,7 +228,7 @@ publicPath也是ouput中的一个属性，用于处理打包后的引入资源�
 
   既然已经可以区分生产和开发环境，那么webpack中的有些配置也可以进行区分了:
 
-
+  ![img](/img/build/img1.jpg)
 
 * 注入环境变量到代码中
 
@@ -246,23 +236,44 @@ publicPath也是ouput中的一个属性，用于处理打包后的引入资源�
 
   例如上一章我们配置Axios的时候的baseURL就需要区分生产和开发环境:
 
+  ![img](/img/build/img1.jpg)
 
   当然也是有解决方案的，我们可以使用WebPack自带的插件DefinePlugin做到这点。
 
 
-首先我们去到build/plugins.js文件中，在里面引入这个插件，然后进行变量配置即可:
+  首先我们去到build/plugins.js文件中，在里面引入这个插件，然后进行变量配置即可:
+
+  ![img](/img/build/img1.jpg)
+
+  之后我们到PageA组件中，使用process.env.NODE_ENV变量查看一下效果:
+
+  ![img](/img/build/img1.jpg)
+
+  可以看到变量已经被注入到了代码中，而不是只存在于webpack打包和编译的进程中了:
+
+  ![img](/img/build/img1.jpg)
+
+* 每次打包前先清空打包dist文件夹
+  未清空是因为hash值的改变并不会覆盖之前的文件
+
+  ![img](/img/build/img1.jpg)
+
+  这里使用fs-extra进行一个文件的删除，先安装
+  ```
+  npm install -D fs-extra
+  ```
+  新建clearFolder.js，并加入代码
+
+  ![img](/img/build/img1.jpg)
+
+  在打包之间先删除文件
+
+  ![img](/img/build/img1.jpg)
 
 
-
-之后我们到PageA组件中，使用process.env.NODE_ENV变量查看一下效果:
-
+到此项目构建webpack打包已经差不多已经结束了，还有一些打包上的东西这里也就不再多说了，对于团队合作开发这一块，还需要使用ts-lint或者es-lint等等这里也就不过多介绍了，感兴趣的同学可自行观看添加~
 
 
-可以看到变量已经被注入到了代码中，而不是只存在于webpack打包和编译的进程中了:
-
-
-
-另外还需要记得把baseURL换成生产环境的url
 
 
 >既然选择了远方，便只顾风雨兼程。
