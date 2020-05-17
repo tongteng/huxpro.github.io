@@ -138,11 +138,11 @@ tags:
 
 * 设置构建缓存和构建加速
 
-  在设置构建缓存之前我们首先要考虑的是那些地方需要进行设置，不出意外的话就是**babel-loader**，然后就是**css-loader**，因为这两类文件最多:
+  在设置构建缓存之前首先要考虑的是那些地方需要进行设置，不出意外的话就是**babel-loader**，然后就是**css-loader**，因为这两类文件最多:
 
   1. 安装对应工具
 
-  在本项目中，我们使用的是**cache-loader**来做缓存，**thread-loader**来做构建加速
+  在本项目中，使用的是**cache-loader**来做缓存，**thread-loader**来做构建加速
 
   ```
   npm install -D cache-loader thread-loader
