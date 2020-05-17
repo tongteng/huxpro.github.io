@@ -27,72 +27,72 @@ tags:
 
 这一步的主要目的是在导入文件时候可以使用简写的路径，比如下面的导入路径对比:
 
-![img](/img/opt-exp/img1.jpg)
+![img](/img/opt-exp/img1.png)
 
 * 为了测试这一效果，我们首先在**src**文件夹中新建**containers**文件夹，然后再在里面新建**views**和**shared**文件夹，**views**主要用来存放业务相关的页面，而**shared**则是用于存放和业务有关的共用组件(注意这个**shared**和**components**是不一样的，**component**应该是和业务抽离的组件，并且在切换业务后也可以进行复用的组件，这样做有一个好处就是可以直接将**components**里面的组件拿出来用)
 
 * 之后我们在**views**和**shared**里面各新建一个组件
 
-  ![img](/img/opt-exp/img2.jpg)
+  ![img](/img/opt-exp/img2.png)
 
 * 然后在**index.tsx**中引入他们并使用
 
-  ![img](/img/opt-exp/img3.jpg)
+  ![img](/img/opt-exp/img3.png)
 
   效果
 
-  ![img](/img/opt-exp/img4.jpg)
+  ![img](/img/opt-exp/img4.png)
 
 * 但是此时在引用的路径上存在一个错误，说是不能以<strong>.tsx</strong>文件结尾
 
-  ![img](/img/opt-exp/img5.jpg)
+  ![img](/img/opt-exp/img5.png)
 
   但是当我们去掉<strong>.tsx</strong>的时候，又会发现文件无法引入了
 
-  ![img](/img/opt-exp/img6.jpg)
+  ![img](/img/opt-exp/img6.png)
 
   原因是，**webpack**不知道你引入的这个**index**文件是什么类型的文件，当然这个问题解决起来也很简单，我们去到**webpack.config.js**文件中，添加**resolve**配置:
 
-  ![img](/img/opt-exp/img7.jpg)
+  ![img](/img/opt-exp/img7.png)
 
   **extension**配置的意思是，当我导入文件时候如果没有标注文件后缀，那么就默认导入这几种类型的文件。
   之后我们回到入口**index.tsx**中，将引入路径改成如下也可以正常运行:
 
-  ![img](/img/opt-exp/img8.jpg)
+  ![img](/img/opt-exp/img8.png)
 
-  ![img](/img/opt-exp/img9.jpg)
+  ![img](/img/opt-exp/img9.png)
 
 * 之后我们发现在这两个组件的引入位置中，都存在<strong>./containers</strong>，那么如何省略这一块呢？也就是如何简写这一块的路径呢?
 
-  ![img](/img/opt-exp/img10.jpg)
+  ![img](/img/opt-exp/img10.png)
 
   我们可以通过**webpack**的路径别名来做这件事。
 
   首先我们应该去**webpack.config.js**中，同样在**resolve**中配置**alias**属性，将路径别名及其对应的路径放进去:
 
-  ![img](/img/opt-exp/img11.jpg)
+  ![img](/img/opt-exp/img11.png)
 
   然后在入口**index.tsx**中将引入路径改成别名:
 
-  ![img](/img/opt-exp/img12.jpg)
+  ![img](/img/opt-exp/img12.png)
   
   这时候项目虽然可以跑成功，但是因为**TypeScript**无法根据这个路径找到模块，所以报了错:
 
-  ![img](/img/opt-exp/img13.jpg)
+  ![img](/img/opt-exp/img13.png)
 
   我们去到**tsconfig.json**中进行配置，添加如下属性，目的就是告诉**TypeScript**路径别名指向的模块:
 
-  ![img](/img/opt-exp/img14.jpg)
+  ![img](/img/opt-exp/img14.png)
 
   回到**index.tsx**会发现已经不报错了
 
-  ![img](/img/opt-exp/img15.jpg)
+  ![img](/img/opt-exp/img15.png)
 
   注意: 如果以后还需要添加路径别名，记得**webpack.config.js**和**tsconfig.json**都需要进行配置，下面是贵宾厅项目中的路径别名配置:
 
-  ![img](/img/opt-exp/img16.jpg)
+  ![img](/img/opt-exp/img16.png)
 
-  ![img](/img/opt-exp/img17.jpg)
+  ![img](/img/opt-exp/img17.png)
 
 
 ### 开启sourcemap
@@ -105,11 +105,11 @@ tags:
 
   比如我们在**containers/views/ViewTest**组件中跑一个错误出来：
 
-  ![img](/img/opt-exp/img18.jpg)
+  ![img](/img/opt-exp/img18.png)
 
   然后在网页中点开来看，发现代码是这样的，这种还是没有经过压缩的简单组件:
 
-  ![img](/img/opt-exp/img19.jpg)
+  ![img](/img/opt-exp/img19.png)
 
   那么出错的话如何更好的定位呢?答案是开启**webpack**的**sourcemap**功能。
 
@@ -118,11 +118,11 @@ tags:
 
   要开启**sourcemap**非常简单，只需要在**webpack**的**devtool**属性中填写你需要的**sourcemap**类型即可:
 
-  ![img](/img/opt-exp/img20.jpg)
+  ![img](/img/opt-exp/img20.png)
 
   这时候我们再点回之前的错误信息中可以发现，错误定位变得非常简单了:
 
-  ![img](/img/opt-exp/img21.jpg)
+  ![img](/img/opt-exp/img21.png)
 
 * [sourcemap分为很多个类型，点击查看配置，自行选取适合的类型](https://webpack.js.org/configuration/devtool/#root)
 
@@ -152,29 +152,29 @@ tags:
 
   首先我们在**build**文件夹下新建**loaders.js**文件，然后在里面填写配置:
 
-  ![img](/img/opt-exp/img22.jpg)
+  ![img](/img/opt-exp/img22.png)
 
   然后我们到**build/rules/jsRules.js**中加上配置:
 
-  ![img](/img/opt-exp/img23.jpg)
+  ![img](/img/opt-exp/img23.png)
 
   再到**build/rules/styleRules.js**中加入配置:
 
-  ![img](/img/opt-exp/img24.jpg)
+  ![img](/img/opt-exp/img24.png)
 
   注意这个地方有个坑:
   在**less-loader**不要使用**thread-loader**，否则报错。
 
-  ![img](/img/opt-exp/img25.jpg)
+  ![img](/img/opt-exp/img25.png)
 
 
   这时候我们重跑项目会发现新建了一个<strong>.cache-loader</strong>目录，这就表示成功配置完成:
 
-  ![img](/img/opt-exp/img26.jpg)
+  ![img](/img/opt-exp/img26.png)
 
   另外，记得在根目录新建<strong>.gitignore</strong>文件，不要把缓存目录也上传到git上了
 
-  ![img](/img/opt-exp/img27.jpg)
+  ![img](/img/opt-exp/img27.png)
 
 
 >既然选择了远方，便只顾风雨兼程。

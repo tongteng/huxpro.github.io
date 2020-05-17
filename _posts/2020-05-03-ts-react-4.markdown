@@ -42,50 +42,50 @@ tags:
 
   然后我们在**src/containers/views**中编写两个路由页面**PageA**和**PageB**
 
-  ![img](/img/router-axios/img1.jpg)
+  ![img](/img/router-axios/img1.png)
 
 * 接着我们还是在**src/containers/views**中新建**App**组件，并在**App**组件下新建**routerMap.tsx**文件用作存放路由表。
   在**routerMap**文件中，我们引入**lazy**方法，并通过**import()**引入**PageA**和**PageB**，然后通过统统放到一个数组中，将这个数组导出去:
 
-  ![img](/img/router-axios/img2.jpg)
+  ![img](/img/router-axios/img2.png)
 
 * 我们去到**App/index.tsx**中，从**react-router-dom**中导入**BrowserRouter**, **Route**和**Switch**，以及从**React**中导入**Suspense**组件，然后编写路由文件，并将其用**Suspense**包裹起来，使用了**lazy**方法导入的组件必须用**Suspense**包裹，否则不能加载出来并报错:
 
-  ![img](/img/router-axios/img3.jpg)
+  ![img](/img/router-axios/img3.png)
 
 * 在这里需要注意的是，如果使用的是**BrowserRouter**，需要在**webpack**中加上**devServer**配置，并打开**historyApiFallback**，原因是当跳转到**page-b**页面的时候，他会试图寻找**page-b.html**，但我们是单页应用，所以没有这个文件，从而出现找不到的情况，而**historyApiFallback**会在找不到页面的情况下跳转回**index.html**，避免直接出现找不到的情况:
 
-  ![img](/img/router-axios/img4.jpg)
+  ![img](/img/router-axios/img4.png)
 
 * 然后引入**App**组件
 
-  ![img](/img/router-axios/img5.jpg)
+  ![img](/img/router-axios/img5.png)
 
 * 最后我们回到页面查看跳转情况:
   路径为<strong>/</strong>的时候加载**PageA**:
 
-  ![img](/img/router-axios/img6.jpg)
+  ![img](/img/router-axios/img6.png)
 
   当路径切换为<strong>/page-b</strong>的时候，则加载**PageB**:
 
-  ![img](/img/router-axios/img7.jpg)
+  ![img](/img/router-axios/img7.png)
 
   这时候我们的前端路由就搭建好了，并且可以进行动态加载
 
 * 使用**withRouter**方法进行路由跳转
   去到**PageA**页面添加如下代码:
 
-  ![img](/img/router-axios/img8.jpg)
+  ![img](/img/router-axios/img8.png)
 
-  ![img](/img/router-axios/img9.jpg)
+  ![img](/img/router-axios/img9.png)
 
   这时候点击跳转B按钮的时候就能够跳转到<strong>/page-b</strong>路径了:
 
-  ![img](/img/router-axios/img10.jpg)
+  ![img](/img/router-axios/img10.png)
 
   当然你也可以使用**js**方法进行路由跳转
 
-  ![img](/img/router-axios/img11.jpg)
+  ![img](/img/router-axios/img11.png)
 
 ### 加入Axios
 
@@ -102,25 +102,25 @@ tags:
 
 * 然后我们在**src**文件夹中新建一个**services**文件夹，再在里面新建**request.ts**和**apis.ts**两个文件，其中**apis.ts**文件用作存放请求**api**的路径，**reqiest.ts**用作二次封装**Axios**:
 
-  ![img](/img/router-axios/img12.jpg)
+  ![img](/img/router-axios/img12.png)
 
 * 首先我们去到**request.ts**文件中，对**Axios文件**进行二次封装。具体代码如下
 
-  ![img](/img/router-axios/img13.jpg)
+  ![img](/img/router-axios/img13.png)
 
 * 然后我们到**apis.ts**文件中填写需要请求的接口的路径
 
-  ![img](/img/router-axios/img14.jpg)
+  ![img](/img/router-axios/img14.png)
 
 * 记得在**webpack.config.js**和**tsconfig.js**中配置好路径别名，因为在页面中请求接口会经常来**apis.ts**文件中来获取路径地址
 
-  ![img](/img/router-axios/img15.jpg)
+  ![img](/img/router-axios/img15.png)
 
-  ![img](/img/router-axios/img16.jpg)
+  ![img](/img/router-axios/img16.png)
 
 * 直接来看我自己项目中的接口请求
 
-  ![img](/img/router-axios/img17.jpg)
+  ![img](/img/router-axios/img17.png)
 
 
 

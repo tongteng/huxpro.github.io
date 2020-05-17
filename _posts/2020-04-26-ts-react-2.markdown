@@ -44,11 +44,11 @@ tags:
   
   2. 安装完成后，我们在**build/rules**下新建**styleRules.js**文件，并编写相关配置:
      
-     ![img](/img/sass-antd/img1.jpg)
+     ![img](/img/sass-antd/img1.png)
 
      之后在**webpack.config.js**中进行引用:
 
-     ![img](/img/sass-antd/img2.jpg)
+     ![img](/img/sass-antd/img2.png)
 
      这里有一点需要注意的是，**webpack**调用这三个**loader**的顺序是从右到左的，也就是上图的从下到上，其中:
      **sass-loader**: 将 **Sass** 编译成 **CSS**，默认使用 **Node Sass**
@@ -57,13 +57,13 @@ tags:
 
   3. 然后**src**下新建一个**index.scss**，随便写入一个样式，在**index.tsx**中使用:
 
-     ![img](/img/sass-antd/img3.jpg)
+     ![img](/img/sass-antd/img3.png)
 
-     ![img](/img/sass-antd/img4.jpg)
+     ![img](/img/sass-antd/img4.png)
 
   4. 这时候就可以使用**sass**来进行样式编写了
 
-     ![img](/img/sass-antd/img5.jpg)
+     ![img](/img/sass-antd/img5.png)
 
 ### 支持css-module
 
@@ -75,36 +75,36 @@ tags:
 
   1. 要支持**css-module**非常简单，只要在前面的**styleRules.js**文件中，针对**css-loader**做一个配置即可:
 
-     ![img](/img/sass-antd/img6.jpg)
+     ![img](/img/sass-antd/img6.png)
   
   2. 然后在**src/index.tsx**中将**scss**文件的引入和使用方式改成如下:
 
-     ![img](/img/sass-antd/img7.jpg)
+     ![img](/img/sass-antd/img7.png)
 
      这时候我们就可以查看效果了，可以看到**test**变成了一串自动生成的**hash**码:
 
-     ![img](/img/sass-antd/img8.jpg)
+     ![img](/img/sass-antd/img8.png)
 
      当然也有小伙伴可能会说，变成了这一串**hash**那我怎么知道这个元素是哪个组件的呢?我们把配置改成如下即可:
 
-     ![img](/img/sass-antd/img9.jpg)
+     ![img](/img/sass-antd/img9.png)
 
      可以看到类名中加上了原本的类名:
 
-     ![img](/img/sass-antd/img10.jpg)
+     ![img](/img/sass-antd/img10.png)
 
   3. 在前面配置和使用中，虽然已经可以正常使用，但是**index.tsx**出现了一个错误，说找不到**index.scss**文件
 
-     ![img](/img/sass-antd/img11.jpg)
+     ![img](/img/sass-antd/img11.png)
 
      原因是**ts**不认识这个**scss**文件，所以这时候需要编写对应的类型文件<strong>.d.ts</strong>。
      我们在**src**下新建**types**文件夹，并新建**typed-css-modules.d.ts**文件，在里面定义**scss**模块内容:
 
-     ![img](/img/sass-antd/img12.jpg)
+     ![img](/img/sass-antd/img12.png)
 
      这时候引用**scss**文件就不会再报错了，但同时存在一个问题，**styles**的类型是**any**:
 
-     ![img](/img/sass-antd/img13.jpg)
+     ![img](/img/sass-antd/img13.png)
 
   4. 要添加对**styles**的类型定义，我们当然可以自己新建一个**index.scss.d.ts**文件在里面自己写一个**interface**来定义，但是这样未免太过于麻烦，所以这时候我们可以使用**css-modules-typescript-loader**这个库来帮助我们定义，首先需要安装它
 
@@ -114,30 +114,30 @@ tags:
 
      然后在**styleRules.js**中加上他:
 
-     ![img](/img/sass-antd/img14.jpg)
+     ![img](/img/sass-antd/img14.png)
 
      在编写或改动了**scss**文件后， 它会自动生成**index.scss.d.ts**文件:
 
-     ![img](/img/sass-antd/img15.jpg)
+     ![img](/img/sass-antd/img15.png)
 
 ### 支持公共样式
 
   在支持了**sass**之后，我们可以在样式代码的编写中使用变量，而有些变量可以放置在公共的样式文件中，使用的时候直接引用即可。
   我们在**src**下新建**styles**文件夹，然后新建**base.scss**文件，在里面写入一个变量:
 
-  ![img](/img/sass-antd/img16.jpg)
+  ![img](/img/sass-antd/img16.png)
 
   之后我们在**index.scss**文件中引用这个变量:
 
-  ![img](/img/sass-antd/img17.jpg)
+  ![img](/img/sass-antd/img17.png)
 
   这时候还需要在**styleRules.js**中，将公共样式文件夹的路径添加进去，否则**sass-loader**不会去编译这些文件，这里需要注意的是，这里使用的是**sass-loader@7.3.1**，而在最新的**8.0.2**版本不能直接在**options**中写**includePaths**，而需要在**sassOptions**中写，之前的版本则可以直接写**includePaths**，另外**8.0.2**版本和后面会说到的**thread-loader**配合起来会报错，所以现在先不要用**8.0.2**版本:
 
-  ![img](/img/sass-antd/img18.jpg)
+  ![img](/img/sass-antd/img18.png)
 
   这是我们可以看到效果依旧正确
 
-  ![img](/img/sass-antd/img19.jpg)
+  ![img](/img/sass-antd/img19.png)
 
 ### antd及其按需加载
 
@@ -153,15 +153,15 @@ tags:
 
   因为前面已经安装了**babel-plugin-import**，所以我们可以直接用按需加载的方式使用**antd**的组件:
 
-  ![img](/img/sass-antd/img20.jpg)
+  ![img](/img/sass-antd/img20.png)
 
   但是你会发现这样引入的组件缺少样式
 
-  ![img](/img/sass-antd/img21.jpg)
+  ![img](/img/sass-antd/img21.png)
 
   这时候我们需要在**jsRules.js**文件中添加对应的配置:
 
-  ![img](/img/sass-antd/img22.jpg)
+  ![img](/img/sass-antd/img22.png)
 
   另外，因为**antd**的样式使用的是**less**编写而成，所以我们需要额外安装**less**和**less-loader**
 
@@ -171,11 +171,11 @@ tags:
   然后在**styleRules.js**中添加对**less**文件的支持，注意**less-loader4.0**以后的版本在这里的**javascriptEnabled**一定要为**true**，否则因为无法开启**js**编译而导致报错:
   但是如果**less-loader**为最新版本的话会提示没有当前配置项，所以这里直接使用**less-loader@5.0.0**版本
 
-  ![img](/img/sass-antd/img23.jpg)
+  ![img](/img/sass-antd/img23.png)
 
   最后回到页面中会发现样式引入也ok了:
 
-  ![img](/img/sass-antd/img24.jpg)
+  ![img](/img/sass-antd/img24.png)
 
 
 >既然选择了远方，便只顾风雨兼程。
