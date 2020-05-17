@@ -102,7 +102,9 @@ tags:
   这对于模块化来说不大好，而且还会导致**js**文件变得更大从而降低网页加载速度，所以需要将**css**额外抽离出来。
 
 * 使用**mini-css-extract-plugin**抽离**css**
+
   在**webpack4.0**后，推荐使用**mini-css-extract-plugin**来对**css**文件进行分离，首先我们需要安装**mini-css-extract-plugin**包，这个包里面包含一个**loader**和一个**plugin**，后续需要分别进行配置
+
   ```
     npm install -D mini-css-extract-plugin
   ```
@@ -113,7 +115,9 @@ tags:
   ![img](/img/build/img12.png)
 
   在这里需要注意一点:
-  **sass-loader**是将**sass**文件编译为**css**，而**css-loader**是将**css**转为**CommonJS**模块，**style-loader**是将对应的**JS**生成为**style**节点，那么如果我们要分离**css**文件的话，应该是在**css-loader**之后进行，所以下面我们把之前**style-loader**的地方全都替换成**MiniCssExtractPlugin**:
+
+  **sass-loader**是将**sass**文件编译为**css**，而**css-loader**是将**css**转为**CommonJS**模块，
+  **style-loader**是将对应的**JS**生成为**style**节点，那么如果我们要分离**css**文件的话，应该是在**css-loader**之后进行，所以下面我们把之前**style-loader**的地方全都替换成**MiniCssExtractPlugin**:
 
   ![img](/img/build/img35.png)
 
@@ -127,7 +131,7 @@ tags:
 * 打包结果
   可以看到**css**文件已经被抽离了出来，并且**js**和**css**文件的**hash**值是不一样的:
 
-  ![img](/img/build/img4.png)
+  ![img](/img/build/img14.png)
 
 * 使用**optimization**优化打包
   在上面的打包配置中，因为之前做了路由组件的代码分割，所以组件**PageA**和**PageB**会被单独打包成**js**文件，再来看看打包的情况表，会发现**page-a**的公用模块(引入的库)体积高达500多k，这对于网页加载资源而言是非常大的:
@@ -144,7 +148,7 @@ tags:
 
   ![img](/img/build/img17.png)
 
-  **runtime**是指**webpack**运行环境(模块解析和加载)和模块信息清单，而**runtimeChunk**就是询问该清部分清单代码是否单独打包出来，我们这里将其单独打包出来并命名为**manifest**。
+  **runtime**是指**webpack**运行环境(模块解析和加载)和模块信息清单，而**runtimeChunk**就是询问该部分清单代码是否单独打包出来，我们这里将其单独打包出来并命名为**manifest**。
 
 * 然后我们通过配置**splitChunk**的**cacheGroups**将一些公共模块分离出来打包:
 
@@ -164,9 +168,13 @@ tags:
   如果还需要继续细分，可以继续在**splitChunks.cacheGroups**配置中将公用模块继续细分并添加进去，使得打包的代码越来越小
 
 * 压缩**js**代码和压缩**css**代码并优化
+
   1. 使用**terser-webpack-plugin**优化js压缩过程:
+
   **terser-webpack-plugin**是一个**js**代码优化插件，他可以使用多线程和缓存更快的压缩**js**代码，优化打包体验，并且使用非常简单。
+
   为什么使用这个插件呢?因为**webpack**默认使用的**webpack.optimize.UglifyJsPlugin**插件是不支持**es6**语法的，当然你可以先用**babel**转一下再用**UglifyJsPlugin**也无所谓。
+
   首先我们安装
   ```
   npm install -D terser-webpack-plugin
@@ -205,7 +213,7 @@ tags:
 
 * 使用**cross-env**设置环境变量
 
-  **cross-env**是一个专门用于设置**webpack**运行或者打包时候的进程环境变量的工具，注意是进程环境变量而不是全局变量，这中变量在**webpack**打包结束后就没有了，所以不能写入到业务代码中(当然也是可以写入的，不过需要另外配置)。
+  **cross-env**是一个专门用于设置**webpack**运行或者打包时候的进程环境变量的工具，注意是进程环境变量而不是全局变量，这变量在**webpack**打包结束后就没有了，所以不能写入到业务代码中(当然也是可以写入的，不过需要另外配置)。
 
   我们首先安装它
 
@@ -298,7 +306,7 @@ npm start
 
 ![img](/img/build/img40.png)
 
-对于团队合作开发这一块，还需要使用**ts-lint**或者**es-lint**等等这里也就不过多介绍了，感兴趣的同学可自行观看添加~
+对于团队合作开发这一块，还需要使用**ts-lint**或者**es-lint**等等这里也就不过多介绍了，感兴趣的同学可自行查看文档添加~
 
 
 

@@ -29,7 +29,7 @@ tags:
 
 ![img](/img/opt-exp/img1.png)
 
-* 为了测试这一效果，我们首先在**src**文件夹中新建**containers**文件夹，然后再在里面新建**views**和**shared**文件夹，**views**主要用来存放业务相关的页面，而**shared**则是用于存放和业务有关的共用组件(注意这个**shared**和**components**是不一样的，**component**应该是和业务抽离的组件，并且在切换业务后也可以进行复用的组件，这样做有一个好处就是可以直接将**components**里面的组件拿出来用)
+* 首先在**src**文件夹中新建**containers**文件夹，然后再在里面新建**views**和**shared**文件夹，**views**主要用来存放业务相关的页面，而**shared**则是用于存放和业务有关的共用组件(注意这个**shared**和**components**是不一样的，**component**应该是和业务抽离的组件，并且在切换业务后也可以进行复用的组件，这样做有一个好处就是可以直接将**components**里面的组件拿出来用)
 
 * 之后我们在**views**和**shared**里面各新建一个组件
 
@@ -47,7 +47,7 @@ tags:
 
   ![img](/img/opt-exp/img5.png)
 
-  但是当我们去掉<strong>.tsx</strong>的时候，又会发现文件无法引入了
+  但是当去掉<strong>.tsx</strong>的时候，又会发现文件无法引入了
 
   ![img](/img/opt-exp/img6.png)
 

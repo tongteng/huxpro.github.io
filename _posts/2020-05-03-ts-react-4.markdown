@@ -36,7 +36,7 @@ tags:
   ```
   在这里说一下**react-router**和**react-router-dom**之间的区别:
 
-  **react-router**是**react-router-dom**的核心代码，提供理由的核心**api**，例如**Router**、**Route**、**Switch**等，而**react-router-dom**提供了**BrowserRouter**，**Link**等**api**，**react-router-dom**里面包含了**react-router**，所以一般只需要安装**react-router-dom**
+  **react-router**是**react-router-dom**的核心代码，提供了一些核心**api**，例如**Router**、**Route**、**Switch**等，而**react-router-dom**提供了**BrowserRouter**，**Link**等**api**，**react-router-dom**里面包含了**react-router**，所以一般只需要安装**react-router-dom**
 
 * 编写路由页面
 
