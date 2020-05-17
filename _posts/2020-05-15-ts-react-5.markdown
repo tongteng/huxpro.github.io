@@ -40,34 +40,34 @@ tags:
 
   去到**package.json**加上如下命令:
 
-  ![img](/img/build/img1.jpg)
+  ![img](/img/build/img2.jpg)
 
 * 测试打包
 
   我们运行**npm run build**之后可以看到包已经打好了:
 
-  ![img](/img/build/img1.jpg)
+  ![img](/img/build/img3.jpg)
 
 ### filename和chunkFilename
 
 在**webpack**的**output**配置中，**filename**是打包文件名，也就是说我们列在**entry**中的文件打包出来的名字，比如把**entry**中的文件名设置为**haha**:
 
-![img](/img/build/img1.jpg)
+![img](/img/build/img4.jpg)
 
 而**chunkFilename**则是未列在**entry中**的模块文件，下面划红线的都属于**chunk file**:
 
-![img](/img/build/img1.jpg)
+![img](/img/build/img5.jpg)
 
 而**filename**和**chunkFilename**则是对这两种文件命名的设定，这个命名很重要吗?
 是的，因为浏览器存在缓存问题，如果按照目前配置，每一次代码变化的情况下打包出来的文件名不变，浏览器优先加载缓存中的文件，然后导致页面没有展示最新的页面情况。
 
 * 要解决这个问题我们先把**chunkFilename**设置好:
 
-  ![img](/img/build/img1.jpg)
+  ![img](/img/build/img6.jpg)
 
 * 然后可以通过给文件名设置**hash**值的方式保证每次打包的文件名都是不同的，**filename**和**chunkFilename**都支持该设置:
 
-  ![img](/img/build/img1.jpg)
+  ![img](/img/build/img7.jpg)
 
 * 另外这个**hash**值的设置有三种: 分别是**hash**、**chunkhash**和**contenthash**
 
@@ -80,24 +80,24 @@ tags:
 ### publicPath
 **publicPath**也是**ouput**中的一个属性，用于处理打包后的引入资源路径，比如上面我没有添加**publicPath**的时候，打包出来的**index.html**引入资源的路径：
 
-![img](/img/build/img1.jpg)
+![img](/img/build/img8.jpg)
 
 现在我把**publicPath**设置为/，再来看看打包出来的**index.html**的引入资源路径就成了绝对路径了:
 
-![img](/img/build/img1.jpg)
+![img](/img/build/img9.jpg)
 
 那么这个配置有什么用处呢?
 
 * 用处
   在我们对前端项目打包完毕之后，**js**和**css**等较大的静态资源都会被上传到**cdn**上面，而**index.html**则会留在我们自己的服务器上，用户访问**index.html**的时候，**index.html**加载的**css**和**js**路径就应该是**cdn**域名上的资源，比如说我们公司在用的**CDN**资源是**https://file.40017.cn/shtrain/**，那么这串东西就应在放到**publicPath**中让他自己在资源引入的前面加上:
 
-  ![img](/img/build/img1.jpg)
+  ![img](/img/build/img10.jpg)
 
 ### 单独打包CSS
 
   在前面的打包配置中，我们虽然可以打包成功，但是这时候的**css**是被嵌入到**js**文件中的:
 
-  ![img](/img/build/img1.jpg)
+  ![img](/img/build/img11.jpg)
 
   这对于模块化来说不大好，而且还会导致**js**文件变得更大从而降低网页加载速度，所以需要将**css**额外抽离出来。
 
@@ -110,55 +110,55 @@ tags:
 * 配置**loader**
   接下来我们去到**build/rules/styleRules.js**文件中引入他:
 
-  ![img](/img/build/img1.jpg)
+  ![img](/img/build/img12.jpg)
 
   在这里需要注意一点:
   **sass-loader**是将**sass**文件编译为**css**，而**css-loader**是将**css**转为**CommonJS**模块，**style-loader**是将对应的**JS**生成为**style**节点，那么如果我们要分离**css**文件的话，应该是在**css-loader**之后进行，所以下面我们把之前**style-loader**的地方全都替换成**MiniCssExtractPlugin**:
 
-  ![img](/img/build/img1.jpg)
+  ![img](/img/build/img35.jpg)
 
 * 配置**plugin**
   然后去到**build/plugins.js**文件中，引入并使用**mini-css-extract-plugin**并使用，配置主要是**filename**和**chunkFilename**:
 
-  ![img](/img/build/img1.jpg)
+  ![img](/img/build/img13.jpg)
 
   注意这里需要用**contenthash**而不是**chunkhash**，否则打包出来的和引用该**css**的**js**文件的**hash**值是一样的，而且改**css**还会导致打包后的**js**文件的**hash**值产生变化。
 
 * 打包结果
   可以看到**css**文件已经被抽离了出来，并且**js**和**css**文件的**hash**值是不一样的:
 
-  ![img](/img/build/img1.jpg)
+  ![img](/img/build/img4.jpg)
 
 * 使用**optimization**优化打包
   在上面的打包配置中，因为之前做了路由组件的代码分割，所以组件**PageA**和**PageB**会被单独打包成**js**文件，再来看看打包的情况表，会发现**page-a**的公用模块(引入的库)体积高达500多k，这对于网页加载资源而言是非常大的:
 
-  ![img](/img/build/img1.jpg)
+  ![img](/img/build/img15.jpg)
 
   我们可以通过配置**WebPack**的**optimization**来对代码进一步分割，使得打出来的包更小。
 
 * 首先我们去到**build**文件夹下新建文件**optimization.js**，新建并导出一个对象:
 
-  ![img](/img/build/img1.jpg)
+  ![img](/img/build/img16.jpg)
 
   然后配置**runtimeChunk**:
 
-  ![img](/img/build/img1.jpg)
+  ![img](/img/build/img17.jpg)
 
   **runtime**是指**webpack**运行环境(模块解析和加载)和模块信息清单，而**runtimeChunk**就是询问该清部分清单代码是否单独打包出来，我们这里将其单独打包出来并命名为**manifest**。
 
 * 然后我们通过配置**splitChunk**的**cacheGroups**将一些公共模块分离出来打包:
 
-  ![img](/img/build/img1.jpg)
+  ![img](/img/build/img18.jpg)
 
   这里面的**priority**是优先级的意思，数字越大优先级越高，**antd**依赖**moment**，所以**moment**优先级比**antd**高，然后**commons**是剩余模块统一打包不做分割了。
 
 * 接下来我们把**optimization**导入到**webpack**中去使用:
 
-  ![img](/img/build/img1.jpg)
+  ![img](/img/build/img19.jpg)
 
   然后查看一下打包结果:
 
-  ![img](/img/build/img1.jpg)
+  ![img](/img/build/img20.jpg)
 
   可以清楚的看到之前**vendor~page-a**文件从发500多k变成了200多k，另外还多出来一个**vendor**文件有200多k，说明是可以显著减少打包出来的文件的大小的。
   如果还需要继续细分，可以继续在**splitChunks.cacheGroups**配置中将公用模块继续细分并添加进去，使得打包的代码越来越小
@@ -171,107 +171,134 @@ tags:
   ```
   npm install -D terser-webpack-plugin
   ```
-  然后在build/optimization.js文件中配置minimizer，导入terser-webpack-plugin并使用即可:
+  然后在**build/optimization.js**文件中配置**minimizer**，导入**terser-webpack-plugin**并使用即可:
 
-  ![img](/img/build/img1.jpg)
+  ![img](/img/build/img21.jpg)
 
-  2. 压缩css代码并优化压缩过程
-  在之前的打包中，我们的js代码虽然已经经过了压缩，但是css代码还没有压缩:
+  2. 压缩**css**代码并优化压缩过程
+  在之前的打包中，我们的**js**代码虽然已经经过了压缩，但是**css**代码还没有压缩:
 
-  ![img](/img/build/img1.jpg)
+  ![img](/img/build/img22.jpg)
 
-  这时候我们需要使用optimize-css-assets-webpack-plugin来做这件事。
+  这时候我们需要使用**optimize-css-assets-webpack-plugin**来做这件事。
   首先安装它
   ```
   npm install -D optimize-css-assets-webpack-plugin
   ```
-  然后继续在minimizer中进行配置:
+  然后继续在**minimizer**中进行配置:
 
-  ![img](/img/build/img1.jpg)
+  ![img](/img/build/img23.jpg)
 
   最后我们重新打包来看看结果:
 
-  ![img](/img/build/img1.jpg)
+  ![img](/img/build/img24.jpg)
 
-  可以看到css文件也被压缩了。
+  可以看到**css**文件也被压缩了。
 
 ### 环境变量设置区分生产开发环境
 
-在webpack4.0之后，打包的时候会出现这个警告:
+在**webpack4.0**之后，打包的时候会出现这个警告:
 
-![img](/img/build/img1.jpg)
+![img](/img/build/img25.jpg)
 
-这是因为在4.0后webpack受到parcel的竞争，而parcel就是号称0配置的打包器，所以webpack也内置了一套默认的打包配置，但是开发环境和生产环境的配置是不一样的，所以需要通过配置webpack.mode属性来告诉webpack处于什么环境，另外开发环境和生产环境有些不一样，例如生产环境一般不需要sourcemap功能，之前打包出来很多.map文件就是因为开启了sourcemap所致，所以我们也需要通过环境变量来对此进行区分。
+这是因为在**4.0**后**webpack**受到**parcel**的竞争，而**parcel**就是号称0配置的打包器，所以**webpack**也内置了一套默认的打包配置，但是开发环境和生产环境的配置是不一样的，所以需要通过配置**webpack.mode**属性来告诉**webpack**处于什么环境，另外开发环境和生产环境有些不一样，例如生产环境一般不需要**sourcemap**功能，之前打包出来很多<strong>.map</strong>文件就是因为开启了**sourcemap**所致，所以我们也需要通过环境变量来对此进行区分。
 
-* 使用cross-env设置环境变量
+* 使用**cross-env**设置环境变量
 
-  cross-env是一个专门用于设置webpack运行或者打包时候的进程环境变量的工具，注意是进程环境变量而不是全局变量，这中变量在webpack打包结束后就没有了，所以不能写入到业务代码中(当然也是可以写入的，不过需要另外配置)。
+  **cross-env**是一个专门用于设置**webpack**运行或者打包时候的进程环境变量的工具，注意是进程环境变量而不是全局变量，这中变量在**webpack**打包结束后就没有了，所以不能写入到业务代码中(当然也是可以写入的，不过需要另外配置)。
 
   我们首先安装它
 
   ```
   npm install -D cross-env
   ```
-  然后去到package.json文件中，在script定义的命令中插入环境变量
+  然后去到**package.json**文件中，在**script**定义的命令中插入环境变量
 
-  ![img](/img/build/img1.jpg)
+  ![img](/img/build/img26.jpg)
   
-  这一步的目的就是将NODE_ENV这个变量插入到进程中，开发和生产分别是development和production。
+  这一步的目的就是将**NODE_ENV**这个变量插入到进程中，开发和生产分别是**development**和**production**。
 
-  然后我们去到webpack.config.js中，添加mode属性的设置，通过process.env.NODE_ENV即可获取之前设置的环境变量:
+  然后我们去到**webpack.config.js**中，添加**mode**属性的设置，通过**process.env.NODE_ENV**即可获取之前设置的环境变量:
 
-  ![img](/img/build/img1.jpg)
+  ![img](/img/build/img27.jpg)
 
-  这样就消除了上面所说的webpack的警告了。
+  这样就消除了上面所说的**webpack**的警告了。
 
-* 通过环境变量分别配置开发生产webpack配置
+* 通过环境变量分别配置开发生产**webpack**配置
 
-  既然已经可以区分生产和开发环境，那么webpack中的有些配置也可以进行区分了:
+  既然已经可以区分生产和开发环境，那么**webpack**中的有些配置也可以进行区分了:
 
-  ![img](/img/build/img1.jpg)
+  ![img](/img/build/img28.jpg)
 
 * 注入环境变量到代码中
 
-  按照前面的说法，通过cross-env注入的变量只能存在于webpack打包或者编译的进程中，那么有时候我们需要在代码运行的过程中获取到这个环境变量怎么办呢?
+  按照前面的说法，通过**cross-env**注入的变量只能存在于**webpack**打包或者编译的进程中，那么有时候我们需要在代码运行的过程中获取到这个环境变量怎么办呢?
 
-  例如上一章我们配置Axios的时候的baseURL就需要区分生产和开发环境:
+  例如上一章我们配置**Axios**的时候的**baseURL**就需要区分生产和开发环境:
 
-  ![img](/img/build/img1.jpg)
+  ![img](/img/build/img29.jpg)
 
-  当然也是有解决方案的，我们可以使用WebPack自带的插件DefinePlugin做到这点。
+  当然也是有解决方案的，我们可以使用**WebPack**自带的插件**DefinePlugin**做到这点。
 
 
-  首先我们去到build/plugins.js文件中，在里面引入这个插件，然后进行变量配置即可:
+  首先我们去到**build/plugins.js**文件中，在里面引入这个插件，然后进行变量配置即可:
 
-  ![img](/img/build/img1.jpg)
+  ![img](/img/build/img30.jpg)
 
-  之后我们到PageA组件中，使用process.env.NODE_ENV变量查看一下效果:
+  之后我们到**PageA**组件中，使用**process.env.NODE_ENV**变量查看一下效果:
 
-  ![img](/img/build/img1.jpg)
+  ![img](/img/build/img31.jpg)
 
-  可以看到变量已经被注入到了代码中，而不是只存在于webpack打包和编译的进程中了:
+  可以看到变量已经被注入到了代码中，而不是只存在于**webpack**打包和编译的进程中了:
 
-  ![img](/img/build/img1.jpg)
+  ![img](/img/build/img32.jpg)
 
 * 每次打包前先清空打包dist文件夹
-  未清空是因为hash值的改变并不会覆盖之前的文件
+  未清空是因为**hash**值的改变并不会覆盖之前的文件
 
-  ![img](/img/build/img1.jpg)
+  ![img](/img/build/img33.jpg)
 
-  这里使用fs-extra进行一个文件的删除，先安装
+  这里使用**fs-extra**进行一个文件的删除，先安装
   ```
   npm install -D fs-extra
   ```
-  新建clearFolder.js，并加入代码
+  新建**clearFolder.js**，并加入代码
 
-  ![img](/img/build/img1.jpg)
+  ![img](/img/build/img34.jpg)
 
-  在打包之间先删除文件
+  在**package.json**中配置打包之前先删除文件
 
-  ![img](/img/build/img1.jpg)
+  ![img](/img/build/img36.jpg)
 
 
-到此项目构建webpack打包已经差不多已经结束了，还有一些打包上的东西这里也就不再多说了，对于团队合作开发这一块，还需要使用ts-lint或者es-lint等等这里也就不过多介绍了，感兴趣的同学可自行观看添加~
+到此项目构建**webpack**打包已经差不多已经结束了，还有一些打包上的东西这里也就不再多说了，如果想直接在本地跑打包出来的文件，可以先安装一个**express-generatoer**生成器
+```
+npm install express-generator -g
+```
+创建一个**express**项目
+
+![img](/img/build/img37.jpg)
+
+进入**expressDemo**目录，安装项目依赖
+```
+cd expressDemo
+npm install
+```
+将**dist/static**目录下所有文件复制到**express**项目下的**public**文件夹
+
+![img](/img/build/img38.jpg)
+
+启动expressDemo
+```
+npm start
+```
+就能看到效果了
+
+![img](/img/build/img39.jpg)
+
+![img](/img/build/img40.jpg)
+
+对于团队合作开发这一块，还需要使用**ts-lint**或者**es-lint**等等这里也就不过多介绍了，感兴趣的同学可自行观看添加~
 
 
 
